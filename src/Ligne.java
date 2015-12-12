@@ -5,33 +5,26 @@ public class Ligne {
 	String lignes;
 	String commentaire;
 	
-	public Ligne(String ligne){
-		
+	public Ligne(String ligne) throws Exception{
 		String[] split = ligne.split(";");
-		this.numeroVersion = split[0];
-		this.idUtilisateur = split[1];
-		this.date = split[2];
-		this.lignes = split[3];
-		this.commentaire = split[4];
 		
+		if (split[4] != null){
 		
+			this.numeroVersion = split[0];
+			this.idUtilisateur = split[1];
+			this.date = split[2];
+			this.lignes = split[3];
+			this.commentaire = split[4];
+		}
+		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
 	}
 	
-	/*public Ligne(String numeroVersion, String commentaire){
-		
-		this.numeroVersion = numeroVersion;
-		this.commentaire = commentaire;
-		
-	}*/
-	
 	public String detectionTicket(){
-		
 		return null;
-		
 	}
 	
 	public String toString(){
-		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date+ " " + this.lignes+ " " + this.commentaire;
+		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " " + this.lignes + " " + this.commentaire;
 	}
 	
 	
