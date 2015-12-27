@@ -25,43 +25,73 @@ public class Ligne {
 	public String detectionTickets(String tickets){
 		
 		String ticket = "";
-		/*String[] split = tickets.split(",");
-		int index;
+		String[] split = tickets.split(",");
+		String commentaire = "";
 		
 		for (String t : split){
 			
-			index = this.commentaire.indexOf(t);
+			//System.out.println("FOR");
 			
-			if (index != -1 && ticket == ""){
-				//System.out.println("COUCOU2");
-				Pattern p = Pattern.compile(".*" +t + "-[0-9]{1,}.*");
-				//System.out.println(t + "-[0-9]{1,}");
-				Matcher m = p.matcher(this.commentaire);
-				//System.out.println(this.commentaire);
-				//System.out.println(m.toString());
-				if (m.matches())
-				{
-					//System.out.println("COUCOU");
-				    ticket = m.group(0);
+			int indexCour = 0;
+			int index2 = 0;
+			
+			while(indexCour != -1 && index2 != -1 && index2 < this.commentaire.length()-1){						// && ticket == ""
+			
+				commentaire = this.commentaire.substring(index2);
+				System.out.println(commentaire);
+				indexCour = commentaire.indexOf(t);
+				
+				if(indexCour != -1){
+										
+					System.out.println("indexCour !=-1 ="+indexCour);
+					
+					Pattern p = Pattern.compile("[0-9]{1,}+");
+					Matcher m = p.matcher(commentaire.substring(indexCour));
+					System.out.println(commentaire.substring(indexCour));
+					//System.out.println(m.toString());
+					
+					if (m.find()){
+						
+						//System.out.println("TROUVE ind=" + indexCour + " end=" + m.end());
+						//System.out.println(commentaire.substring(indexCour,indexCour+m.end()));
+					    ticket += commentaire.substring(indexCour,indexCour+m.end()) + ", ";
+					    
+					    index2+= indexCour + m.end();
+					    //System.out.println("FIN indexCour="+indexCour);
+					    //System.out.println("FIN index2="+index2);
+					}
+					else {
+						index2+= indexCour+1;
+						System.out.println("FIN indexCour="+indexCour);
+					    System.out.println("FIN index2="+index2);
+					}
+					//++index;
 				}
+				
+				//index = this.commentaire.substring(index+1).indexOf(t);
+				
 				//ticket = this.commentaire.substring(index,this.commentaire.indexOf(t+"-[1-9]+"));
 			}
-			else if (index != -1 && ticket != ""){
+			/*else if (index != -1 && ticket != ""){
 				//System.out.println("COUCOU2");
-				Pattern p = Pattern.compile(".*" +t + "-[0-9]{1,}.*");
+				Pattern p = Pattern.compile("[0-9]{1,}+");
 				//System.out.println(t + "-[0-9]{1,}");
-				Matcher m = p.matcher(this.commentaire);
+				Matcher m = p.matcher(this.commentaire.substring(index));
 				//System.out.println(this.commentaire);
 				//System.out.println(m.toString());
 				
-				if (m.matches())
+				if (m.find())
 				{
 					//System.out.println("COUCOU");
-					ticket += ", " + m.group(0);
+					ticket += ", " + this.commentaire.substring(index,index+m.end());
 				}
-			}
-		}*/
-		return ticket;
+			}*/
+		}
+		//System.out.println("Test");
+		if (ticket.length() != 0){
+			return ticket.substring(0,ticket.length()-2);		// Suppression de la dernière virgule
+		}
+		else return "";
 	}
 
 	public String toString(){
