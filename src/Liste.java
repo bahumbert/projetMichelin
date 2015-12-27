@@ -58,7 +58,7 @@ public class Liste {
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += tmp + "\n";
+				affichage += "Trouvé "+ tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
@@ -73,8 +73,8 @@ public class Liste {
 	public static void main(String[] args) {
 		Scanner entree = new Scanner(System.in);
 		
-		/*System.out.println("Veuillez entrer les tickets à détecter, séparés par des virgules :");
-		String tickets = entree.nextLine();*/
+		System.out.println("Veuillez entrer les tickets à détecter, séparés par des virgules :");
+		String tickets = entree.nextLine();
 		
 		System.out.println("Veuillez entrer le chemin du fichier :");
 		String fichier = entree.nextLine();
@@ -84,7 +84,7 @@ public class Liste {
 		System.out.println(liste.toString());
 		System.out.println(liste.taille());
 		
-		//System.out.println(liste.detectionTickets(tickets));
+		System.out.println(liste.detectionTickets(tickets));
 		
 		System.out.println(";-)");
 		
