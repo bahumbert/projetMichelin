@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-import java.util.Scanner;
+//import java.util.Scanner;
 import java.io.*;
 
 public class Liste {
@@ -58,7 +58,7 @@ public class Liste {
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "Trouvé "+ tmp + "\n";
+				affichage += tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
@@ -69,26 +69,4 @@ public class Liste {
 		}
 		return affichage;
 	}
-	
-	public static void main(String[] args) {
-		Scanner entree = new Scanner(System.in);
-		
-		System.out.println("Veuillez entrer les tickets à détecter, séparés par des virgules :");
-		String tickets = entree.nextLine();
-		
-		System.out.println("Veuillez entrer le chemin du fichier :");
-		String fichier = entree.nextLine();
-		
-		Liste liste = new Liste(fichier);
-		
-		System.out.println(liste.toString());
-		System.out.println(liste.taille());
-		
-		System.out.println(liste.detectionTickets(tickets));
-		
-		System.out.println(";-)");
-		
-		entree.close();
-	}
-
 }
