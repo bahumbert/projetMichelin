@@ -1,3 +1,7 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /*import java.util.regex.Matcher;
 import java.util.regex.Pattern;*/
 
@@ -5,8 +9,40 @@ public class Ligne {
 	String numeroVersion;
 	String idUtilisateur;
 	String date;
+	Date d;
 	String lignes;
 	String commentaire;
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+	
+	public String getVersion()
+	{
+		return numeroVersion;
+	}
+	
+	public String getUser()
+	{
+		return idUtilisateur;
+	}
+	
+	public String getDate()
+	{
+		return date;
+	}
+	
+	public String getLignes()
+	{
+		return lignes;
+	}
+	
+	public String getCommentaire()
+	{
+		return commentaire;
+	}
+	
+	public Date getD() throws ParseException
+	{
+		return format.parse(date);
+	}
 	
 	public Ligne(String ligne) throws Exception{
 		String[] split = ligne.split(";");
@@ -63,10 +99,9 @@ public class Ligne {
 		}*/
 		return ticket;
 	}
-
+	
 	public String toString(){
 		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " " + this.lignes + " " + this.commentaire;
 	}
-	
 	
 }
