@@ -1,12 +1,48 @@
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/*import java.util.regex.Matcher;
+import java.util.regex.Pattern;*/
 
 public class Ligne {
 	String numeroVersion;
 	String idUtilisateur;
 	String date;
+	Date d;
 	String lignes;
 	String commentaire;
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+	
+	public String getVersion()
+	{
+		return numeroVersion;
+	}
+	
+	public String getUser()
+	{
+		return idUtilisateur;
+	}
+	
+	public String getDate()
+	{
+		return date;
+	}
+	
+	public String getLignes()
+	{
+		return lignes;
+	}
+	
+	public String getCommentaire()
+	{
+		return commentaire;
+	}
+	
+	public Date getD() throws ParseException
+	{
+		return format.parse(date);
+	}
 	
 	public Ligne(String ligne) throws Exception{
 		String[] split = ligne.split(";");
@@ -25,58 +61,47 @@ public class Ligne {
 	public String detectionTickets(String tickets){
 		
 		String ticket = "";
-		String[] split = tickets.split(",");
-		String commentaire = "";
+		/*String[] split = tickets.split(",");
+		int index;
 		
 		for (String t : split){
 			
-			//System.out.println("FOR");
+			index = this.commentaire.indexOf(t);
 			
-			int indexCour = 0;
-			int index2 = 0;
-			
-			while(indexCour != -1 && index2 != -1 && index2 < this.commentaire.length()-1){						// && ticket == ""
-			
-				commentaire = this.commentaire.substring(index2);
-				//System.out.println(commentaire);
-				indexCour = commentaire.indexOf(t);
+			if (index != -1 && ticket == ""){
+				//System.out.println("COUCOU2");
+				Pattern p = Pattern.compile(".*" +t + "-[0-9]{1,}.*");
+				//System.out.println(t + "-[0-9]{1,}");
+				Matcher m = p.matcher(this.commentaire);
+				//System.out.println(this.commentaire);
+				//System.out.println(m.toString());
+				if (m.matches())
+				{
+					//System.out.println("COUCOU");
+				    ticket = m.group(0);
+				}
+				//ticket = this.commentaire.substring(index,this.commentaire.indexOf(t+"-[1-9]+"));
+			}
+			else if (index != -1 && ticket != ""){
+				//System.out.println("COUCOU2");
+				Pattern p = Pattern.compile(".*" +t + "-[0-9]{1,}.*");
+				//System.out.println(t + "-[0-9]{1,}");
+				Matcher m = p.matcher(this.commentaire);
+				//System.out.println(this.commentaire);
+				//System.out.println(m.toString());
 				
-				if(indexCour != -1){
-										
-					//System.out.println("indexCour !=-1 ="+indexCour);
-					
-					Pattern p = Pattern.compile("[0-9]{1,}+");
-					Matcher m = p.matcher(commentaire.substring(indexCour));
-					//System.out.println(commentaire.substring(indexCour));
-					//System.out.println(m.toString());
-					
-					if (m.find()){
-						
-						//System.out.println("TROUVE ind=" + indexCour + " end=" + m.end());
-						//System.out.println(commentaire.substring(indexCour,indexCour+m.end()));
-					    ticket += commentaire.substring(indexCour,indexCour+m.end()) + ", ";
-					    
-					    index2+= indexCour + m.end();
-					    //System.out.println("FIN indexCour="+indexCour);
-					    //System.out.println("FIN index2="+index2);
-					}
-					else {
-						index2+= indexCour+1;
-						System.out.println("FIN indexCour="+indexCour);
-					    System.out.println("FIN index2="+index2);
-					}
+				if (m.matches())
+				{
+					//System.out.println("COUCOU");
+					ticket += ", " + m.group(0);
 				}
 			}
-		}
-		if (ticket.length() != 0){
-			return ticket.substring(0,ticket.length()-2);		// Suppression de la dernière virgule
-		}
-		else return "";
+		}*/
+		return ticket;
 	}
-
+	
 	public String toString(){
 		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " " + this.lignes + " " + this.commentaire;
 	}
-	
 	
 }

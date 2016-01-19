@@ -1,14 +1,26 @@
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Date;
+import java.util.Iterator;
+//import java.util.Scanner;
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
-public class Liste {
-
-	/**
-	 * @param args
-	 */
+public class Liste 
+{
 	
 	ArrayList<Ligne> liste;
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); 
+	
+	public Liste()
+	{
+		liste=new ArrayList<Ligne>();
+	}
+	
+	public ArrayList<Ligne> getListe()
+	{
+		return this.liste;
+	}
 	
 	public Liste(String fichier){
 		this.liste = new ArrayList<Ligne>();
@@ -58,7 +70,7 @@ public class Liste {
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "Trouvé "+ tmp + "\n";
+				affichage += tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
@@ -70,25 +82,33 @@ public class Liste {
 		return affichage;
 	}
 	
-	public static void main(String[] args) {
-		Scanner entree = new Scanner(System.in);
+	public Liste filtres (String auteur, String date1, String date2,String version) throws ParseException
+	{
+		Liste filtre = new Liste();
+		filtre.liste = this.liste;
+		Date d1 = new Date();
+		Date d2 = new Date();
+		Ligne ligne;
 		
-		System.out.println("Veuillez entrer les tickets à détecter, séparés par des virgules :");
-		String tickets = entree.nextLine();
-		
-		System.out.println("Veuillez entrer le chemin du fichier :");
-		String fichier = entree.nextLine();
-		
-		Liste liste = new Liste(fichier);
-		
-		System.out.println(liste.toString());
-		System.out.println(liste.taille());
-		
-		System.out.println(liste.detectionTickets(tickets));
-		
-		System.out.println(";-)");
-		
-		entree.close();
-	}
+		if(date1!="")
+			d1 = format.parse(date1);
+		if(date2!="")
+			d2 = format.parse(date2);
 
+		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
+			ligne=it.next();
+		    if (auteur!="" && !(ligne.getUser().contains(auteur)))
+		        it.remove();
+		    
+		    else if (version!="" && !ligne.getVersion().contains(version))
+		    	it.remove();
+		    
+		    else if(date1!="" && ligne.getD().compareTo(d1)<=0)
+		    	it.remove();
+		    
+		    else if(date2!="" && ligne.getD().compareTo(d2)>=0)
+		    	it.remove();
+		}
+		return filtre;
+	}
 }
