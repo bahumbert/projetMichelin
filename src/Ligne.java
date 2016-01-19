@@ -12,6 +12,7 @@ public class Ligne {
 	Date d;
 	String lignes;
 	String commentaire;
+	String ticket;
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
 	
 	public Ligne(String ligne) throws Exception{
@@ -36,6 +37,7 @@ public class Ligne {
 		
 		for (String t : split){
 			
+			t = t.trim();
 			//System.out.println("FOR");
 			
 			int indexCour = 0;
@@ -68,14 +70,15 @@ public class Ligne {
 					}
 					else {
 						index2+= indexCour+1;
-						System.out.println("FIN indexCour="+indexCour);
-					    System.out.println("FIN index2="+index2);
+						/*System.out.println("FIN indexCour="+indexCour);
+					    System.out.println("FIN index2="+index2);*/
 					}
 				}
 			}
 		}
 		if (ticket.length() != 0){
-			return ticket.substring(0,ticket.length()-2);		// Suppression de la dernière virgule
+			this.ticket = ticket.substring(0,ticket.length()-2); // Suppression de la dernière virgule
+			return this.ticket;		
 		}
 		else return "";
 	}
@@ -86,32 +89,37 @@ public class Ligne {
 	
 	public String getVersion()
 	{
-		return numeroVersion;
+		return this.numeroVersion;
 	}
 	
 	public String getUser()
 	{
-		return idUtilisateur;
+		return this.idUtilisateur;
 	}
 	
 	public String getDate()
 	{
-		return date;
+		return this.date;
 	}
 	
 	public String getLignes()
 	{
-		return lignes;
+		return this.lignes;
 	}
 	
 	public String getCommentaire()
 	{
-		return commentaire;
+		return this.commentaire;
+	}
+	
+	public String getTicket()
+	{
+		return this.ticket;
 	}
 	
 	public Date getD() throws ParseException
 	{
-		return format.parse(date);
+		return this.format.parse(date);
 	}
 	
 }

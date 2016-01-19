@@ -4,7 +4,7 @@ public class Modele extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private final String[] entetes = {"Numero","Auteur","Date","Ligne","Commmentaire"};
+	private final String[] entetes = {"Numero","Auteur","Date","Ligne","Commmentaire", "Ticket(s) repéré(s)"};
 	private Liste liste;
 	
 	public Modele()
@@ -54,6 +54,9 @@ public class Modele extends AbstractTableModel
 
 		case 4:
 			return liste.getListe().get(rowIndex).getCommentaire();
+			
+		case 5:
+			return liste.getListe().get(rowIndex).getTicket();
 
 		default:
 			throw new IllegalArgumentException();

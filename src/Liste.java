@@ -70,7 +70,7 @@ public class Liste
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "Trouvé" + tmp + "\n";
+				affichage += "Trouvé " + tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
@@ -81,7 +81,7 @@ public class Liste
 		}
 		return affichage;
 	}
-	
+		
 	public Liste filtres (String auteur, String date1, String date2,String version) throws ParseException
 	{
 		Liste filtre = new Liste();

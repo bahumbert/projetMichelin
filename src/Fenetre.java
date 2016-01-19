@@ -63,14 +63,18 @@ public class Fenetre extends JFrame
 			 		{
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
-		 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
-			 		JTextField pattern= new JTextField();
-			 				 		
-			 		Object [] parameters ={msg,pattern};
-			 		JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
-			 	
-			 		Modele model = getModele();
-			 		String affichage =model.getListe().detectionTickets(pattern.getText());
+			 		else {
+			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
+				 		JTextField pattern= new JTextField();
+				 				 		
+				 		Object [] parameters ={msg,pattern};
+				 		JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
+				 	
+				 		Modele model = getModele();
+				 		String affichage = model.getListe().detectionTickets(pattern.getText());
+						model.fireTableDataChanged();
+				 		System.out.println(affichage);
+			 		}
 			 		
 			 	break;
 				
@@ -227,6 +231,10 @@ public class Fenetre extends JFrame
 		 this.setExtendedState(Frame.MAXIMIZED_BOTH);
 		 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 this.setVisible(true);
+		 
+
+		/*Component test = onglets.getTabComponentAt(0);
+		test.setBackground(Color.blue);*/
 	}
 	
 }
