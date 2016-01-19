@@ -70,7 +70,7 @@ public class Liste
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += tmp + "\n";
+				affichage += "Trouvé" + tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
