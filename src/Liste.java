@@ -97,10 +97,10 @@ public class Liste
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (auteur!="" && !(ligne.getUser().contains(auteur)))
+		    if (auteur!="" && !(ligne.getIdUtilisateur().contains(auteur)))
 		        it.remove();
 		    
-		    else if (version!="" && !ligne.getVersion().contains(version))
+		    else if (version!="" && !ligne.getNumeroVersion().contains(version))
 		    	it.remove();
 		    
 		    else if(date1!="" && ligne.getD().compareTo(d1)<=0)

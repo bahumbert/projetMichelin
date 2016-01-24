@@ -72,8 +72,72 @@ public class Fenetre extends JFrame
 				 	
 				 		Modele model = getModele();
 				 		String affichage = model.getListe().detectionTickets(pattern.getText());
-						model.fireTableDataChanged();
-				 		System.out.println(affichage);
+						
+				 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
+				 		JTable t = (JTable) s.getViewport().getView();
+				 		
+				 		/*DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+					    renderer.setHorizontalAlignment(SwingConstants.LEFT);
+					    renderer.setBackground(Color.blue);
+					    
+					    for (int column = 0; column < t.getColumnCount(); column++)
+					    {
+					    	for (int row = 0; row < t.getRowCount()-2; row++)
+						    {
+					    		//t.getR
+						 		TableCellRenderer cellRenderer = renderer;
+						 		//Component c = t.getValueAt(row, column);
+						 		Component c = t.prepareRenderer(cellRenderer, row, column);
+						 				//t.getComponent(0);
+						 				//
+						 		c.setBackground(Color.blue);
+						 		c.setForeground(Color.blue);
+						 		//c.set
+						    }
+					    }*/
+				 		
+					    
+					    TableCellRenderer renderer2 = new CustomTableCellRenderer();
+					    try {
+							t.setDefaultRenderer( Class.forName( "java.lang.String" ), renderer2 );
+						} catch (ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					    System.out.println("Coucou2");
+				        //try
+				       // {
+				            //t.setDefaultRenderer(null, renderer2);
+				            //setDefaultRenderer(renderer2);
+				       // }
+				        /*catch( ClassNotFoundException ex )
+				        {
+				            System.exit( 0 );
+				        }*/
+				 		
+					    
+					    
+				 		/*t.getColumnModel().getColumn(0);
+				 		int[] test = t.getSelectedRows();		
+				 		//t.getTab
+				 		
+				 		Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
+				 		
+				 		comp.setBackground(Color.blue);
+				 		
+				 		//t.addRowSelectionInterval(0, 10);
+				 		//t.setselection
+				 		//t.setSelectionBackground(Color.blue);
+				 		//t.selection
+				 		
+				 		/*model.getRowCount();
+				 		model.*/
+				 		
+				 		//t.getColumnModel().getColumn(2).setCellRenderer(renderer);		// Marche mais colorie juste une colonne pas d'équivalent en row
+					    
+				 		model.fireTableDataChanged();
+				 		//model.fireTableRowsUpdated(0, t.getRowCount());
+				 		//System.out.println(affichage);
 			 		}
 			 		
 			 	break;

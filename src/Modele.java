@@ -22,6 +22,7 @@ public class Modele extends AbstractTableModel
 		return liste;
 	}
 	
+
 	@Override
 	public int getColumnCount() {
 		return entetes.length;
@@ -41,10 +42,10 @@ public class Modele extends AbstractTableModel
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		switch (columnIndex) {
 		case 0:
-			return liste.getListe().get(rowIndex).getVersion();
-
+			return liste.getListe().get(rowIndex).getNumeroVersion();
+			
 		case 1:
-			return liste.getListe().get(rowIndex).getUser();
+			return liste.getListe().get(rowIndex).getIdUtilisateur();
 
 		case 2:
 			return liste.getListe().get(rowIndex).getDate();
@@ -62,5 +63,45 @@ public class Modele extends AbstractTableModel
 			throw new IllegalArgumentException();
 		}
 	}
+	
+	@Override
+	public boolean isCellEditable(int rowIndex, int columnIndex){
+		return true;
+	}
+	
+	@Override
+	public void setValueAt(Object value, int row, int col) {
+	    
+	    switch (col) {
+		case 0:
+			liste.getListe().get(row).setNumeroVersion((String)value);
+		    break;
+		    
+		case 1:
+			liste.getListe().get(row).setIdUtilisateur((String)value);
+			break;
+			
+		case 2:
+			liste.getListe().get(row).setDate((String)value);
+			break;
+			
+		case 3:
+			liste.getListe().get(row).setLignes((String)value);
+			break;
+			
+		case 4:
+			liste.getListe().get(row).setCommentaire((String)value);
+			break;
+			
+		case 5:
+			liste.getListe().get(row).setTicket((String)value);
+			// Fonction gestion avancée 
+			break;
+			
+		default:
+			throw new IllegalArgumentException();
+		}
+	    fireTableCellUpdated(row, col);	  
+	 }
 	
 }

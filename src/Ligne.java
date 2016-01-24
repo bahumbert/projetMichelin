@@ -87,16 +87,6 @@ public class Ligne {
 		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " " + this.lignes + " " + this.commentaire;
 	}
 	
-	public String getVersion()
-	{
-		return this.numeroVersion;
-	}
-	
-	public String getUser()
-	{
-		return this.idUtilisateur;
-	}
-	
 	public String getDate()
 	{
 		return this.date;
@@ -117,6 +107,50 @@ public class Ligne {
 		return this.ticket;
 	}
 	
+	public String getNumeroVersion() {
+		return this.numeroVersion;
+	}
+
+	public void setNumeroVersion(String numeroVersion) {
+		this.numeroVersion = numeroVersion;
+	}
+
+	public String getIdUtilisateur() {
+		return this.idUtilisateur;
+	}
+
+	public void setIdUtilisateur(String idUtilisateur) {
+		this.idUtilisateur = idUtilisateur;
+	}
+
+	public SimpleDateFormat getFormat() {
+		return this.format;
+	}
+
+	public void setFormat(SimpleDateFormat format) {
+		this.format = format;
+	}
+
+	public void setDate(String date) {
+		this.date = date;
+	}
+
+	public void setD(Date d) {
+		this.d = d;
+	}
+
+	public void setLignes(String lignes) {
+		this.lignes = lignes;
+	}
+
+	public void setCommentaire(String commentaire) {
+		this.commentaire = commentaire;
+	}
+
+	public void setTicket(String ticket) {
+		this.ticket = ticket;
+	}
+
 	public Date getD() throws ParseException
 	{
 		return this.format.parse(date);
