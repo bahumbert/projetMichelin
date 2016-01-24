@@ -1,5 +1,7 @@
 
 import javax.swing.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -12,7 +14,7 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,7 +46,7 @@ public class Fenetre extends JFrame
 			 
 			 switch(event.getActionCommand())
 			 {
-			 	case "Ouvrir":
+			 	case "Importer un fichier":
 			 		JFileChooser fc = new JFileChooser(".");
 					 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers csv.", "csv");
 			         fc.addChoosableFileFilter(filter);
@@ -58,6 +60,123 @@ public class Fenetre extends JFrame
 						}
 				break;
 				
+			 	case "Importer depuis le serveur":
+			 		
+			 		String cd = JOptionPane.showInputDialog("Chemin relatif du repository : ");
+			 		
+			 		
+			 		//String cmd = "cmd /c cd " + cd + " && dir";
+			 		String cmd = "cmd /c svn log " + cd;
+			 		try {
+						Runtime r = Runtime.getRuntime();
+						
+						Process p = r.exec(cmd);
+						
+						BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+						System.out.println("Here is the standard output of the command:\n");
+
+						int count = 0;
+						String s;
+						String result = "";
+							while ((s = stdInput.readLine()) != null) {
+								count++;
+								result = result + s + "\n";
+							}
+						
+						System.out.println("commande =" + cmd + "\nresult : " + count + " : " + result);
+						stdInput.close();
+						
+						/*
+						onglets.addTab("svn log", table(new Liste(result)));
+						onglets.setTabComponentAt((onglets.getTabCount())-1,new Barre(onglets));
+						
+						OU
+						
+						ajoutOnglet(result);
+						*/
+						
+					}catch(Exception e) {
+						System.out.println("erreur d'execution " + cmd + e.toString());
+			                }
+				 	break;
+			 	
+			 	case "Sauvegarder...":
+			 		if(onglets.getTabCount()==0){
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else{
+			 			
+			 		}
+			 		break;
+			 		
+			 	case "Imprimer...":
+			 		if(onglets.getTabCount()==0){
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour imprimer", "Imprimer", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else{
+			 			
+			 		}
+			 		break;
+			 		
+			 	case "Quitter":
+			 		setVisible(false);
+			 		dispose();
+			 		break;
+			 		
+			 		
+			 		
+				
+			 		/************ Menu Outils **************/
+			 		
+			 	case "Ajouter filtre":
+			 		if(onglets.getTabCount()==0)
+			 		{
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else
+			 		{
+			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			 			
+			 			String author="", day1="",day2="",number="";
+			 			String message = "Sélectionnez les filtres souhaités";
+
+				 		JLabel auteur = new JLabel("Auteur");
+				 		JTextField champ= new JTextField();
+				 		JLabel dates = new JLabel("Dates");;
+				 		JXDatePicker date1 = new JXDatePicker();
+				 		JXDatePicker date2 = new JXDatePicker();
+				 			date1.setFormats(format);
+				 			date2.setDate(Calendar.getInstance().getTime());
+				 			date2.setFormats(format);
+				 		JLabel ticket = new JLabel("Numéro de ticket");
+				 		JTextField champ2= new JTextField();
+				 		
+				 		Object [] params ={message,auteur,champ,dates,date1,date2,ticket,champ2};
+				 		JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
+				 		
+				 		if(champ.getText()!=null)
+				 			author=champ.getText();
+
+				 		if(date1.getDate()!=null)
+				 			day1=format.format(date1.getDate());
+				 		
+				 		day2=format.format(date2.getDate());
+				 		
+				 		if(champ2.getText()!=null)
+				 			number=champ2.getText();
+				 		
+				 		Modele m = getModele();
+				 		try {
+							m.getListe().filtres(author, day1, day2, number);
+							m.fireTableDataChanged();
+						} catch (ParseException e) {
+							e.printStackTrace();
+						}
+				 	
+			 		}
+			 	break;
+			 	
 			 	case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
@@ -141,54 +260,6 @@ public class Fenetre extends JFrame
 			 		}
 			 		
 			 	break;
-				
-			 	case "Ajouter filtre":
-			 		if(onglets.getTabCount()==0)
-			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
-			 		}
-			 		else
-			 		{
-			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			 			
-			 			String author="", day1="",day2="",number="";
-			 			String message = "Sélectionnez les filtres souhaités";
-
-				 		JLabel auteur = new JLabel("Auteur");
-				 		JTextField champ= new JTextField();
-				 		JLabel dates = new JLabel("Dates");;
-				 		JXDatePicker date1 = new JXDatePicker();
-				 		JXDatePicker date2 = new JXDatePicker();
-				 			date1.setFormats(format);
-				 			date2.setDate(Calendar.getInstance().getTime());
-				 			date2.setFormats(format);
-				 		JLabel ticket = new JLabel("Numéro de ticket");
-				 		JTextField champ2= new JTextField();
-				 		
-				 		Object [] params ={message,auteur,champ,dates,date1,date2,ticket,champ2};
-				 		JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
-				 		
-				 		if(champ.getText()!=null)
-				 			author=champ.getText();
-
-				 		if(date1.getDate()!=null)
-				 			day1=format.format(date1.getDate());
-				 		
-				 		day2=format.format(date2.getDate());
-				 		
-				 		if(champ2.getText()!=null)
-				 			number=champ2.getText();
-				 		
-				 		Modele m = getModele();
-				 		try {
-							m.getListe().filtres(author, day1, day2, number);
-							m.fireTableDataChanged();
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
-				 	
-			 		}
-			 	break;
 			 	
 			 	case "Comparer deux listes":
 			 		
@@ -201,22 +272,26 @@ public class Fenetre extends JFrame
 	 {
 		 JMenuBar menuBar = new JMenuBar();
 	 
-		 JMenu fichier = new JMenu("Fichier");
-		 JMenuItem ouvrir = new JMenuItem("Ouvrir");
-		 	fichier.add(ouvrir);
-		 	ouvrir.addActionListener(MenuListener);
+		 JMenu nouveau = new JMenu("Nouveau");
+		 JMenuItem ouvrir = new JMenuItem("Importer un fichier");
+		 nouveau.add(ouvrir);
+		 ouvrir.addActionListener(MenuListener);
+		 	
+		 JMenuItem log = new JMenuItem("Importer depuis le serveur");
+		 nouveau.add(log);
+		 log.addActionListener(MenuListener);
 	 
-		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder");
-		 	sauvegarder.addActionListener(MenuListener);
-		 	fichier.add(sauvegarder);
+		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder...");
+		 sauvegarder.addActionListener(MenuListener);
+		 nouveau.add(sauvegarder);
 				
-		 JMenuItem imprimer = new JMenuItem("Imprimer");
-		 	imprimer.addActionListener(MenuListener);
-		 	fichier.add(imprimer);
+		 JMenuItem imprimer = new JMenuItem("Imprimer...");
+		 imprimer.addActionListener(MenuListener);
+		 nouveau.add(imprimer);
 				
-		 JMenuItem quitter = new JMenuItem("quitter");
-		 	quitter.addActionListener(MenuListener);
-		 	fichier.add(quitter);
+		 JMenuItem quitter = new JMenuItem("Quitter");
+		 quitter.addActionListener(MenuListener);
+		 nouveau.add(quitter);
 	 
 		 JMenu outils = new JMenu("Outils");
 		 	JMenuItem ticket = new JMenuItem("Detection de ticket");
@@ -230,7 +305,7 @@ public class Fenetre extends JFrame
 			outils.add(comparer);
 					
 				
-		menuBar.add(fichier);
+		menuBar.add(nouveau);
 		menuBar.add(outils);
 	 
 		setJMenuBar(menuBar);
