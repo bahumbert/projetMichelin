@@ -71,12 +71,15 @@ public class Liste
 			
 			if (tmp != "" && !tmp.contains(",")){
 				affichage += "Trouvé " + tmp + "\n";
+				t.setConflit(false);
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
+				t.setConflit(true);
 			}
 			else if (tmp == ""){
 				affichage += "Aucun ticket repéré dans cette ligne\n";
+				t.setConflit(true);
 			}
 		}
 		return affichage;
