@@ -199,7 +199,7 @@ public class Fenetre extends JFrame
 					    renderer.setHorizontalAlignment(SwingConstants.LEFT);
 					    renderer.setBackground(Color.blue);
 					    
-					    for (int column = 0; column < t.getColumnCount(); column++)
+					    /*for (int column = 0; column < t.getColumnCount(); column++)
 					    {
 					    	for (int row = 0; row < t.getRowCount()-2; row++)
 						    {
@@ -217,12 +217,14 @@ public class Fenetre extends JFrame
 				 		
 					    
 					    TableCellRenderer renderer2 = new CustomTableCellRenderer();
-					    try {
-							t.setDefaultRenderer( Class.forName( "java.lang.String" ), renderer2 );
-						} catch (ClassNotFoundException e) {
+					  //  try {
+					    	//t.prepareRenderer(renderer2, 2, 2);
+					    	t.setDefaultRenderer(Object.class, renderer2);
+							//t.setDefaultRenderer( Class.forName( "java.lang.String" ), renderer2 );
+						//} catch (ClassNotFoundException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						//	e.printStackTrace();
+					//	}
 					    System.out.println("Coucou2");
 				        //try
 				       // {
@@ -255,6 +257,7 @@ public class Fenetre extends JFrame
 				 		//t.getColumnModel().getColumn(2).setCellRenderer(renderer);		// Marche mais colorie juste une colonne pas d'équivalent en row
 					    
 				 		model.fireTableDataChanged();
+				 		model.fireTableCellUpdated(2, 2);
 				 		//model.fireTableRowsUpdated(0, t.getRowCount());
 				 		//System.out.println(affichage);
 			 		}

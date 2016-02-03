@@ -58,7 +58,7 @@ public class Modele extends AbstractTableModel
 			
 		case 5:
 			return liste.getListe().get(rowIndex).getTicket();
-
+			
 		default:
 			throw new IllegalArgumentException();
 		}
@@ -103,5 +103,17 @@ public class Modele extends AbstractTableModel
 		}
 	    fireTableCellUpdated(row, col);	  
 	 }
+	
+	/*@Override
+	public Class<? extends Object> getColumnClass(int c){
+		Object object = getValueAt(0, c);
+	    if(object == null) {
+	        return Object.class;
+	    if(getValueAt(0, c) instanceof IColorable) {
+	        return ICarPart.class;
+	    } else {
+	        return getValueAt(0, c).getClass();
+	    }
+	}*/
 	
 }

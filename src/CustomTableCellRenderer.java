@@ -28,14 +28,7 @@ public class CustomTableCellRenderer extends DefaultTableCellRenderer
         	
         	System.out.println(table.getValueAt(row, column));
         	//System.console().writer().println((String)value);
-               cell.setBackground( Color.red );
-               // You can also customize the Font and Foreground this way
-               // cell.setForeground();
-               // cell.setFont();
-        }
-        else {
-        	cell.setBackground( Color.white );
-        }*/
+         */
         return cell;
     }
 }
