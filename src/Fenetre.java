@@ -27,9 +27,14 @@ public class Fenetre extends JFrame
 	 
 	 private void ajoutOnglet(File f)
 	 {
-		 String nom=f.getName();
-		 onglets.addTab(nom, table(new Liste(f.getAbsolutePath())));
-		 onglets.setTabComponentAt((onglets.getTabCount())-1,new Barre(onglets));
+		 try{
+			 String nom=f.getName();
+			 onglets.addTab(nom, table(new Liste(f.getAbsolutePath())));
+			 onglets.setTabComponentAt((onglets.getTabCount())-1,new Barre(onglets));
+		 }
+		 catch(Exception e){
+			 throw e;
+		 }
 	 }
 	 
 	 public Modele getModele()
@@ -48,7 +53,7 @@ public class Fenetre extends JFrame
 			 {
 			 	case "Importer un fichier":
 			 		JFileChooser fc = new JFileChooser(".");
-					 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers csv.", "csv");
+					 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers csv et xml.", "csv","xml");
 			         fc.addChoosableFileFilter(filter);
 			         fc.setAcceptAllFileFilterUsed(false);
 			         
@@ -56,11 +61,16 @@ public class Fenetre extends JFrame
 						{
 						 	File fichier;
 							fichier = fc.getSelectedFile();
-							ajoutOnglet(fichier);
+							try{
+								ajoutOnglet(fichier);
+							}
+							catch(Exception e){
+								System.out.println("Erreur "+e.toString());
+							}
 						}
 				break;
 				
-			 	case "Importer depuis le serveur":
+			 	/*case "Importer depuis le serveur":
 			 		
 			 		String cd = JOptionPane.showInputDialog("Chemin relatif du repository : ");
 			 		
@@ -96,10 +106,10 @@ public class Fenetre extends JFrame
 						ajoutOnglet(result);
 						*/
 						
-					}catch(Exception e) {
+					/*}catch(Exception e) {
 						System.out.println("erreur d'execution " + cmd + e.toString());
 			                }
-				 	break;
+				 	break;*/
 			 	
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
@@ -195,71 +205,12 @@ public class Fenetre extends JFrame
 				 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
 				 		JTable t = (JTable) s.getViewport().getView();
 				 		
-				 		/*DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-					    renderer.setHorizontalAlignment(SwingConstants.LEFT);
-					    renderer.setBackground(Color.blue);
-					    
-					    /*for (int column = 0; column < t.getColumnCount(); column++)
-					    {
-					    	for (int row = 0; row < t.getRowCount()-2; row++)
-						    {
-					    		//t.getR
-						 		TableCellRenderer cellRenderer = renderer;
-						 		//Component c = t.getValueAt(row, column);
-						 		Component c = t.prepareRenderer(cellRenderer, row, column);
-						 				//t.getComponent(0);
-						 				//
-						 		c.setBackground(Color.blue);
-						 		c.setForeground(Color.blue);
-						 		//c.set
-						    }
-					    }*/
-				 		
-					    
 					    TableCellRenderer renderer2 = new CustomTableCellRenderer();
-					  //  try {
-					    	//t.prepareRenderer(renderer2, 2, 2);
-					    	t.setDefaultRenderer(Object.class, renderer2);
-							//t.setDefaultRenderer( Class.forName( "java.lang.String" ), renderer2 );
-						//} catch (ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-						//	e.printStackTrace();
-					//	}
-					    System.out.println("Coucou2");
-				        //try
-				       // {
-				            //t.setDefaultRenderer(null, renderer2);
-				            //setDefaultRenderer(renderer2);
-				       // }
-				        /*catch( ClassNotFoundException ex )
-				        {
-				            System.exit( 0 );
-				        }*/
-				 		
-					    
-					    
-				 		/*t.getColumnModel().getColumn(0);
-				 		int[] test = t.getSelectedRows();		
-				 		//t.getTab
-				 		
-				 		Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, col);
-				 		
-				 		comp.setBackground(Color.blue);
-				 		
-				 		//t.addRowSelectionInterval(0, 10);
-				 		//t.setselection
-				 		//t.setSelectionBackground(Color.blue);
-				 		//t.selection
-				 		
-				 		/*model.getRowCount();
-				 		model.*/
-				 		
-				 		//t.getColumnModel().getColumn(2).setCellRenderer(renderer);		// Marche mais colorie juste une colonne pas d'équivalent en row
-					    
+					
+					    t.setDefaultRenderer(Object.class, renderer2);
+
 				 		model.fireTableDataChanged();
-				 		model.fireTableCellUpdated(2, 2);
-				 		//model.fireTableRowsUpdated(0, t.getRowCount());
-				 		//System.out.println(affichage);
+
 			 		}
 			 		
 			 	break;
@@ -280,9 +231,9 @@ public class Fenetre extends JFrame
 		 nouveau.add(ouvrir);
 		 ouvrir.addActionListener(MenuListener);
 		 	
-		 JMenuItem log = new JMenuItem("Importer depuis le serveur");
+		/* JMenuItem log = new JMenuItem("Importer depuis le serveur");
 		 nouveau.add(log);
-		 log.addActionListener(MenuListener);
+		 log.addActionListener(MenuListener);*/
 	 
 		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder...");
 		 sauvegarder.addActionListener(MenuListener);

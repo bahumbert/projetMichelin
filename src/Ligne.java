@@ -13,7 +13,6 @@ public class Ligne {
 	String lignes;
 	String commentaire;
 	String ticket;
-	Boolean conflit;
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
 	
 	public Ligne(String ligne) throws Exception{
@@ -26,7 +25,6 @@ public class Ligne {
 			this.date = split[2];
 			this.lignes = split[3];
 			this.commentaire = split[4];
-			this.conflit = false;
 		}
 		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
 	}
@@ -158,12 +156,4 @@ public class Ligne {
 		return this.format.parse(date);
 	}
 
-	public Boolean getConflit() {
-		return conflit;
-	}
-
-	public void setConflit(Boolean conflit) {
-		this.conflit = conflit;
-	}
-	
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<log>
+<logentry
+   revision="3">
+<author>bahumbert</author>
+<date>2016-02-03T16:03:05.316065Z</date>
+<msg>TESTAGAIN</msg>
+</logentry>
+<logentry
+   revision="2">
+<author>bahumbert</author>
+<date>2016-02-03T16:02:36.608732Z</date>
+<msg>TEST</msg>
+</logentry>
+<logentry
+   revision="1">
+<author>www-data</author>
+<date>2014-08-26T20:22:14.122249Z</date>
+<msg>Automatically created readme.textile and /trunk, /branches, /tags directori
+es. We recommend you to put all your code there.</msg>
+</logentry>
+</log>

@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+
+import org.w3c.dom.DOMException;
+
 //import java.util.Scanner;
 import java.io.*;
 import java.text.ParseException;
@@ -24,28 +27,50 @@ public class Liste
 	
 	public Liste(String fichier){
 		this.liste = new ArrayList<Ligne>();
+		
+		String extension = getExtension(fichier);
+		
+		if(extension.equals("csv")){
 			
-		try{
-			InputStream ips=new FileInputStream(fichier); 
-			InputStreamReader ipsr=new InputStreamReader(ips);
-			BufferedReader br=new BufferedReader(ipsr);
-			String ligne;
-			
-			System.out.println("new list");
-			
-			while ((ligne=br.readLine())!=null){
-				try {
-					this.liste.add(new Ligne(ligne));
+			try{
+				InputStream ips=new FileInputStream(fichier); 
+				InputStreamReader ipsr=new InputStreamReader(ips);
+				BufferedReader br=new BufferedReader(ipsr);
+				String ligne;
+				
+				System.out.println("new list");
+				
+				while ((ligne=br.readLine())!=null){
+					try {
+						this.liste.add(new Ligne(ligne));
+					}
+					catch (Exception e){
+						System.out.println("Ligne non valide et ignorée");
+					}
 				}
-				catch (Exception e){
-					System.out.println("Ligne non valide et ignorée"/* + e.toString()*/);
-				}
+				br.close(); 
+			}		
+			catch (Exception e){
+				System.out.println(e.toString());
 			}
-			br.close(); 
-		}		
-		catch (Exception e){
-			System.out.println(e.toString());
+			
 		}
+		else if (extension.equals("xml")){
+			try {
+				new ParseXML(fichier, this.liste);
+			} catch (DOMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			throw new IllegalArgumentException("Fichier non valide");
+		}
+		
+		
 	}
 	
 	public String toString(){
@@ -71,15 +96,12 @@ public class Liste
 			
 			if (tmp != "" && !tmp.contains(",")){
 				affichage += "Trouvé " + tmp + "\n";
-				t.setConflit(false);
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
-				t.setConflit(true);
 			}
 			else if (tmp == ""){
 				affichage += "Aucun ticket repéré dans cette ligne\n";
-				t.setConflit(true);
 			}
 		}
 		return affichage;
@@ -114,4 +136,21 @@ public class Liste
 		}
 		return filtre;
 	}
+	
+	private String getExtension(String filename) {
+        if (filename == null) {
+            return null;
+        }
+        int extensionPos = filename.lastIndexOf('.');
+        int lastUnixPos = filename.lastIndexOf('/');
+        int lastWindowsPos = filename.lastIndexOf('\\');
+        int lastSeparator = Math.max(lastUnixPos, lastWindowsPos);
+
+        int index = lastSeparator > extensionPos ? -1 : extensionPos;
+        if (index == -1) {
+            return "";
+        } else {
+            return filename.substring(index + 1);
+        }
+    }
 }
