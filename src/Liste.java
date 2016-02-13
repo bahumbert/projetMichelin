@@ -44,7 +44,7 @@ public class Liste
 					try {
 						this.liste.add(new Ligne(ligne));
 					}
-					catch (Exception e){
+					catch (ArrayIndexOutOfBoundsException e){
 						System.out.println("Ligne non valide et ignorée");
 					}
 				}

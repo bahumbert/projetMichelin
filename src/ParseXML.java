@@ -55,25 +55,29 @@ public class ParseXML {
 		    for (int i = 0; i<nbRacineNoeuds; i++) {
 		        if(racineNoeuds.item(i).getNodeType() == Node.ELEMENT_NODE) {
 		            final Element logentry = (Element) racineNoeuds.item(i);
+				    //Affichage d'une ligne
+				    /*System.out.println("\n*************LOGENTRY************");
+				    System.out.println("revision : " + logentry.getAttribute("revision"));*/
 					
-			    //Affichage d'une ligne
-			    /*System.out.println("\n*************LOGENTRY************");
-			    System.out.println("revision : " + logentry.getAttribute("revision"));*/
-				
-		    	    /*
-			     * Etape 6 : des données
-			     */
-			    final Element author = (Element) logentry.getElementsByTagName("author").item(0);
-			    final Element date = (Element) logentry.getElementsByTagName("date").item(0);
-			    final Element msg = (Element) logentry.getElementsByTagName("msg").item(0);
-
-			    //Affichage des données
-			    /*System.out.println("author : " + author.getTextContent());
-			    System.out.println("date : " + date.getTextContent());
-			    System.out.println("msg : " + msg.getTextContent());*/
-
-			    liste.add(new Ligne(logentry.getAttribute("revision")+";"+author.getTextContent()+";"+date.getTextContent()+";1;"+msg.getTextContent()));
-
+			    	    /*
+				     * Etape 6 : des données
+				     */
+				    final Element author = (Element) logentry.getElementsByTagName("author").item(0);
+				    final Element date = (Element) logentry.getElementsByTagName("date").item(0);
+				    final Element msg = (Element) logentry.getElementsByTagName("msg").item(0);
+	
+				    //Affichage des données
+				    /*System.out.println("author : " + author.getTextContent());
+				    System.out.println("date : " + date.getTextContent());
+				    System.out.println("msg : " + msg.getTextContent());*/
+	
+				    try{
+				    	liste.add(new Ligne(logentry.getAttribute("revision")+";"+author.getTextContent()+";"+date.getTextContent()+";1;"+msg.getTextContent()));
+				    }
+				    catch (ArrayIndexOutOfBoundsException e) {
+				    	System.out.println("Ligne non valide et ignorée");
+			        }	
+				    
 		        }
 		    }			
         }
@@ -85,6 +89,6 @@ public class ParseXML {
         }
         catch (final IOException e) {
             e.printStackTrace();
-        }		
+        }	
     }
 }

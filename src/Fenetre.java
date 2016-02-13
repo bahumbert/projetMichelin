@@ -1,6 +1,7 @@
 
 import javax.swing.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -16,6 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -70,21 +74,32 @@ public class Fenetre extends JFrame
 						}
 				break;
 				
-			 	/*case "Importer depuis le serveur":
+			 	case "Importer depuis le serveur":
+			 					 		
+			 		JFileChooser fac = new JFileChooser(".");
+			 		fac.setCurrentDirectory(new java.io.File("."));
+			 		fac.setDialogTitle("Repository : ");
 			 		
-			 		String cd = JOptionPane.showInputDialog("Chemin relatif du repository : ");
+			 		fac.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			 		fac.setAcceptAllFileFilterUsed(false);
 			 		
-			 		
-			 		//String cmd = "cmd /c cd " + cd + " && dir";
-			 		String cmd = "cmd /c svn log " + cd;
+			 		String emplacement = "";
+			 	    if (fac.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
+			 	    	emplacement = fac.getSelectedFile().toString();
+			 	    }
+
+			 		String cmd[] = {"cmd.exe", "/C", "svn log --xml > svnlog.xml"};
 			 		try {
 						Runtime r = Runtime.getRuntime();
 						
-						Process p = r.exec(cmd);
+						final Process p = r.exec(cmd, new String[]{"Path=E:\\Applications\\TortoiseSVN\\bin"},  new File(emplacement));
 						
 						BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+						BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+						
 
-						System.out.println("Here is the standard output of the command:\n");
+						System.out.println("Commande :\n");
 
 						int count = 0;
 						String s;
@@ -94,22 +109,39 @@ public class Fenetre extends JFrame
 								result = result + s + "\n";
 							}
 						
-						System.out.println("commande =" + cmd + "\nresult : " + count + " : " + result);
 						stdInput.close();
 						
-						/*
-						onglets.addTab("svn log", table(new Liste(result)));
-						onglets.setTabComponentAt((onglets.getTabCount())-1,new Barre(onglets));
+							count = 0;
+							String err = "";
+							while ((s = stdErr.readLine()) != null) {
+								count++;
+								err = err + s + "\n";
+							}
+							
+						stdErr.close();
 						
-						OU
+						System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
 						
-						ajoutOnglet(result);
-						*/
+						if (err.equals("")){
+							System.out.println("ICI2");
+							File fichier = new File(emplacement+"\\svnlog.xml");
+							try{
+								System.out.println("Ici");
+								ajoutOnglet(fichier);
+							}
+							catch(Exception e){
+								System.out.println("Erreur "+e.toString());
+							}
+						}
+						else {
+							JOptionPane.showMessageDialog(onglets, "Erreur : "+err);
+						}
+
 						
-					/*}catch(Exception e) {
+					}catch(Exception e) {
 						System.out.println("erreur d'execution " + cmd + e.toString());
 			                }
-				 	break;*/
+				 	break;
 			 	
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
@@ -193,23 +225,65 @@ public class Fenetre extends JFrame
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
+			 			
+			 			InputStream ips;
+			 			String tickets = "";
+						try {
+							ips = new FileInputStream("./tickets.txt");
+							InputStreamReader ipsr=new InputStreamReader(ips);
+							BufferedReader br=new BufferedReader(ipsr);
+							//System.out.println("Fichier ouvert");
+							
+				 			String ligne = "";
+				 			
+							while ((ligne=br.readLine())!=null){
+								tickets += ligne;
+							}
+							
+							br.close(); 
+						} 
+						catch (FileNotFoundException e) {
+							System.out.println("Le fichier des tickets n'a pas été trouvé");
+						} 
+						catch (IOException e) {
+							e.printStackTrace();
+						} 
+
 			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
-				 		JTextField pattern= new JTextField();
+				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
-				 		JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
-				 	
-				 		Modele model = getModele();
-				 		String affichage = model.getListe().detectionTickets(pattern.getText());
-						
-				 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
-				 		JTable t = (JTable) s.getViewport().getView();
-				 		
-					    TableCellRenderer renderer2 = new CustomTableCellRenderer();
-					
-					    t.setDefaultRenderer(Object.class, renderer2);
+				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 
-				 		model.fireTableDataChanged();
+				 		if (res == 0 && !pattern.getText().equals("")){
+					 		Modele model = getModele();
+					 		
+					 		for (int row = 0; row < model.getRowCount(); row++){
+					 			model.setValueAt("", row, 5);
+					 		}
+					 		
+					 		File fichier = new File("./tickets.txt");
+					 		try {
+								FileWriter fw = new FileWriter(fichier);
+								fw.write(pattern.getText());
+								fw.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					 		
+					 		
+					 		String affichage = model.getListe().detectionTickets(pattern.getText());
+							
+					 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
+					 		JTable t = (JTable) s.getViewport().getView();
+					 		
+						    TableCellRenderer renderer2 = new CustomTableCellRenderer();
+						
+						    t.setDefaultRenderer(Object.class, renderer2);
+	
+					 		model.fireTableDataChanged();
+				 		}
 
 			 		}
 			 		
@@ -231,9 +305,9 @@ public class Fenetre extends JFrame
 		 nouveau.add(ouvrir);
 		 ouvrir.addActionListener(MenuListener);
 		 	
-		/* JMenuItem log = new JMenuItem("Importer depuis le serveur");
+		 JMenuItem log = new JMenuItem("Importer depuis le serveur");
 		 nouveau.add(log);
-		 log.addActionListener(MenuListener);*/
+		 log.addActionListener(MenuListener);
 	 
 		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder...");
 		 sauvegarder.addActionListener(MenuListener);

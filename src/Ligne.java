@@ -17,9 +17,9 @@ public class Ligne {
 	
 	public Ligne(String ligne) throws Exception{
 		String[] split = ligne.split(";");
-		
-		if (split[4] != null){
-		
+		//System.out.println(split[0]+ " " + split[1] + " " + split[2] +" "+ split[3]);
+		if (split.length >= 5 && split[4] != null){
+		//System.out.println(split[4]);
 			this.numeroVersion = split[0];
 			this.idUtilisateur = split[1];
 			this.date = split[2];
@@ -31,29 +31,31 @@ public class Ligne {
 	
 	public String detectionTickets(String tickets){
 		
-		String ticket = "";
+		String listTickets = "";
 		String[] split = tickets.split(",");
 		String commentaire = "";
-		
-		for (String t : split){
+		//System.out.println("COUCOU");
+		for (String ticketCour : split){
 			
-			t = t.trim();
+			ticketCour = ticketCour.trim();
 			//System.out.println("FOR");
 			
 			int indexCour = 0;
 			int index2 = 0;
 			
-			while(indexCour != -1 && index2 != -1 && index2 < this.commentaire.length()-1){						// && ticket == ""
+			while(indexCour-ticketCour.length() != -1 && index2 != -1 && index2 < this.commentaire.length()-1){						// && ticket == ""
 			
+				//System.out.println(this.commentaire.length());
 				commentaire = this.commentaire.substring(index2);
 				//System.out.println(commentaire);
-				indexCour = commentaire.indexOf(t);
+				indexCour = commentaire.indexOf(ticketCour) + ticketCour.length();
 				
-				if(indexCour != -1){
+				if(indexCour-ticketCour.length() != -1){
 										
 					//System.out.println("indexCour !=-1 ="+indexCour);
+					//System.out.println("index2 ="+index2);
 					
-					Pattern p = Pattern.compile("[0-9]{1,}+");
+					Pattern p = Pattern.compile("^[-]{1}[0-9]{1,}");
 					Matcher m = p.matcher(commentaire.substring(indexCour));
 					//System.out.println(commentaire.substring(indexCour));
 					//System.out.println(m.toString());
@@ -62,7 +64,12 @@ public class Ligne {
 						
 						//System.out.println("TROUVE ind=" + indexCour + " end=" + m.end());
 						//System.out.println(commentaire.substring(indexCour,indexCour+m.end()));
-					    ticket += commentaire.substring(indexCour,indexCour+m.end()) + ", ";
+						
+						String ticket = ticketCour + commentaire.substring(indexCour,indexCour+m.end());
+						
+						if (!listTickets.contains(ticket)){
+							listTickets += ticket + ", ";
+						}
 					    
 					    index2+= indexCour + m.end();
 					    //System.out.println("FIN indexCour="+indexCour);
@@ -76,8 +83,8 @@ public class Ligne {
 				}
 			}
 		}
-		if (ticket.length() != 0){
-			this.ticket = ticket.substring(0,ticket.length()-2); // Suppression de la dernière virgule
+		if (listTickets.length() != 0){
+			this.ticket = listTickets.substring(0,listTickets.length()-2); // Suppression de la dernière virgule
 			return this.ticket;		
 		}
 		else return "";
