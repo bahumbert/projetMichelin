@@ -12,7 +12,7 @@ public class Ligne {
 	Date d;
 	String lignes;
 	String commentaire;
-	String ticket;
+	String tickets;
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
 	
 	public Ligne(String ligne) throws Exception{
@@ -25,6 +25,7 @@ public class Ligne {
 			this.date = split[2];
 			this.lignes = split[3];
 			this.commentaire = split[4];
+			this.tickets = "";
 		}
 		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
 	}
@@ -67,9 +68,9 @@ public class Ligne {
 						
 						String ticket = ticketCour + commentaire.substring(indexCour,indexCour+m.end());
 						
-						if (!listTickets.contains(ticket)){
+						//if (!listTickets.contains(ticket)){
 							listTickets += ticket + ", ";
-						}
+						//}
 					    
 					    index2+= indexCour + m.end();
 					    //System.out.println("FIN indexCour="+indexCour);
@@ -83,13 +84,52 @@ public class Ligne {
 				}
 			}
 		}
+		
 		if (listTickets.length() != 0){
-			this.ticket = listTickets.substring(0,listTickets.length()-2); // Suppression de la dernière virgule
-			return this.ticket;		
+			
+			int count = 0;
+			int max = 0;
+			String ticketRepete = "";
+			
+			this.tickets = listTickets.substring(0,listTickets.length()-2); // Suppression de la dernière virgule
+			
+			String[] listeTickets = this.tickets.split(",");
+			for(String t : listeTickets){
+				t = t.trim();
+			
+				count = org.apache.commons.lang3.StringUtils.countMatches((CharSequence)this.tickets, (CharSequence)t);
+				
+				if (count > max){
+					ticketRepete = t;
+					max = count;
+				}
+			}
+			
+			if (max != 1){
+				
+				String ticketReplace = "";
+				
+				ticketReplace = this.tickets.replace(", "+ticketRepete, "");
+				ticketReplace = ticketReplace.replace(ticketRepete+ ",", "");
+				ticketReplace = ticketReplace.replace(ticketRepete, "");
+				
+				if (!ticketReplace.equals("")){
+					this.tickets = ticketRepete+" (" + ticketReplace + ")";
+				}
+				else {
+					this.tickets = ticketRepete;
+				}
+			}
+			else if (this.tickets.contains(",")) {
+				this.tickets = this.tickets.substring(0, this.tickets.indexOf(","))+" ("+this.tickets.substring(this.tickets.indexOf(",")+2)+")";
+			}
+			else{}
+					
 		}
-		else return "";
+		return this.tickets;
 	}
 
+	
 	public String toString(){
 		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " " + this.lignes + " " + this.commentaire;
 	}
@@ -109,9 +149,9 @@ public class Ligne {
 		return this.commentaire;
 	}
 	
-	public String getTicket()
+	public String getTickets()
 	{
-		return this.ticket;
+		return this.tickets;
 	}
 	
 	public String getNumeroVersion() {
@@ -154,8 +194,8 @@ public class Ligne {
 		this.commentaire = commentaire;
 	}
 
-	public void setTicket(String ticket) {
-		this.ticket = ticket;
+	public void setTickets(String tickets) {
+		this.tickets = tickets;
 	}
 
 	public Date getD() throws ParseException

@@ -69,7 +69,7 @@ public class Fenetre extends JFrame
 								ajoutOnglet(fichier);
 							}
 							catch(Exception e){
-								System.out.println("Erreur "+e.toString());
+								e.printStackTrace();
 							}
 						}
 				break;
@@ -89,58 +89,61 @@ public class Fenetre extends JFrame
 			 	    	emplacement = fac.getSelectedFile().toString();
 			 	    }
 
-			 		String cmd[] = {"cmd.exe", "/C", "svn log --xml > svnlog.xml"};
-			 		try {
-						Runtime r = Runtime.getRuntime();
-						
-						final Process p = r.exec(cmd, new String[]{"Path=E:\\Applications\\TortoiseSVN\\bin"},  new File(emplacement));
-						
-						BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-						BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-						
-
-						System.out.println("Commande :\n");
-
-						int count = 0;
-						String s;
-						String result = "";
-							while ((s = stdInput.readLine()) != null) {
-								count++;
-								result = result + s + "\n";
-							}
-						
-						stdInput.close();
-						
-							count = 0;
-							String err = "";
-							while ((s = stdErr.readLine()) != null) {
-								count++;
-								err = err + s + "\n";
-							}
+			 	    if (emplacement != ""){
+				 	    
+				 		String cmd[] = {"cmd.exe", "/C", "svn log --xml > svnlog.xml"};
+				 		try {
+							Runtime r = Runtime.getRuntime();
 							
-						stdErr.close();
-						
-						System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
-						
-						if (err.equals("")){
-							System.out.println("ICI2");
-							File fichier = new File(emplacement+"\\svnlog.xml");
-							try{
-								System.out.println("Ici");
-								ajoutOnglet(fichier);
+							/*String test = System.getenv("Path");
+							System.out.println(test);
+							System.out.println(test.length());*/
+							final Process p = r.exec(cmd, new String[]{"Path=C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN/bin"},  new File(emplacement));
+							
+							BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+							BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+							
+	
+							System.out.println("Commande :\n");
+	
+							int count = 0;
+							String s;
+							String result = "";
+								while ((s = stdInput.readLine()) != null) {
+									count++;
+									result = result + s + "\n";
+								}
+							
+							stdInput.close();
+							
+								count = 0;
+								String err = "";
+								while ((s = stdErr.readLine()) != null) {
+									count++;
+									err = err + s + "\n";
+								}
+								
+							stdErr.close();
+							
+							//System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
+							
+							if (err.equals("")){
+								File fichier = new File(emplacement+"\\svnlog.xml");
+								try{
+									ajoutOnglet(fichier);
+								}
+								catch(Exception e){
+									System.out.println("Erreur "+e.toString());
+								}
 							}
-							catch(Exception e){
-								System.out.println("Erreur "+e.toString());
+							else {
+								JOptionPane.showMessageDialog(onglets, "Erreur : "+err);
 							}
-						}
-						else {
-							JOptionPane.showMessageDialog(onglets, "Erreur : "+err);
-						}
-
-						
-					}catch(Exception e) {
-						System.out.println("erreur d'execution " + cmd + e.toString());
-			                }
+				 		}
+				 		catch(Exception e) {
+							System.out.println("erreur d'execution " + cmd + e.toString());
+				        }
+					}
 				 	break;
 			 	
 			 	case "Sauvegarder...":
@@ -254,9 +257,10 @@ public class Fenetre extends JFrame
 				 				 		
 				 		Object [] parameters ={msg,pattern};
 				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
-
+				 		
+			 			Modele model = getModele();
+			 			
 				 		if (res == 0 && !pattern.getText().equals("")){
-					 		Modele model = getModele();
 					 		
 					 		for (int row = 0; row < model.getRowCount(); row++){
 					 			model.setValueAt("", row, 5);
@@ -273,7 +277,7 @@ public class Fenetre extends JFrame
 							}
 					 		
 					 		
-					 		String affichage = model.getListe().detectionTickets(pattern.getText());
+					 		/*String affichage =*/ model.getListe().detectionTickets(pattern.getText());
 							
 					 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
 					 		JTable t = (JTable) s.getViewport().getView();
@@ -281,9 +285,22 @@ public class Fenetre extends JFrame
 						    TableCellRenderer renderer2 = new CustomTableCellRenderer();
 						
 						    t.setDefaultRenderer(Object.class, renderer2);
-	
-					 		model.fireTableDataChanged();
+
 				 		}
+				 		else if (pattern.getText().equals("")){
+
+				 			for (int row = 0; row < model.getRowCount(); row++){
+					 			model.setValueAt(" ", row, 5);
+					 		}
+				 			
+				 			JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
+					 		JTable t = (JTable) s.getViewport().getView();
+				 			TableCellRenderer renderer2 = new CustomTableCellRenderer();
+							
+						    t.setDefaultRenderer(Object.class, renderer2);
+				 			
+				 		}
+				 		model.fireTableDataChanged();
 
 			 		}
 			 		

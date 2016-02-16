@@ -12,23 +12,19 @@ public class CustomTableCellRenderer extends DefaultTableCellRenderer
 		
         Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         
-        
-        if(table.getValueAt(row, 5)!=null && table.getValueAt(row, 5).toString().contains(",")) {
-        	cell.setBackground( Color.red );
+        if (table.getValueAt(row, 5).toString().equals(" ")){
+        	cell.setBackground( Color.white );
+        }
+        else if(table.getValueAt(row, 5)!=null && table.getValueAt(row, 5).toString().contains("(") || table.getValueAt(row, 5).toString().contains(" ")) {
+        	cell.setBackground( Color.orange );
         }
         else if(table.getValueAt(row, 5)==null || table.getValueAt(row, 5).equals("")) {
-        	cell.setBackground( Color.orange );
+        	cell.setBackground( Color.yellow );
         }
         else {
         	cell.setBackground( Color.white );
         }
         
-        /*if(column == 5)
-        {
-        	
-        	System.out.println(table.getValueAt(row, column));
-        	//System.console().writer().println((String)value);
-         */
         return cell;
     }
 }
