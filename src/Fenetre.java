@@ -109,7 +109,7 @@ public class Fenetre extends JFrame
 
 			 /************ Menu Outils **************/
 			 		
-			 	case "Ajouter filtre":
+			 	case "Appliquer des filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit �re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
@@ -158,6 +158,19 @@ public class Fenetre extends JFrame
 			 		}
 			 	break;
 			 	
+			 	case "Enlever tous les filtres":
+			 		if(onglets.getTabCount()==0)
+			 		{
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit �re ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else
+			 		{
+			 			Modele m=getModele();
+			 			m.retour();
+				 		m.fireTableDataChanged();
+			 		}
+			 	break;
+			 	
 			 	case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
@@ -193,7 +206,7 @@ public class Fenetre extends JFrame
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit �re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
-			 			Modele m = getModele();
+			 			Modele mo = getModele();
 			 			JFileChooser filec = new JFileChooser(".");
 						FileNameExtensionFilter filtre = new FileNameExtensionFilter("Fichiers csv.", "csv");
 				        filec.addChoosableFileFilter(filtre);
@@ -207,11 +220,11 @@ public class Fenetre extends JFrame
 
 							Liste compare;
 							if(event.getActionCommand()=="Trouver les similitudes"){
-								compare=m.getListe().comparerIdentique(new Liste(fichier.getAbsolutePath()));
+								compare=mo.getListe().comparerIdentique(new Liste(fichier.getAbsolutePath()));
 								s="similitudes";
 							}
 							else{
-								compare=m.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
+								compare=mo.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
 								s="diff�rences";
 							}
 							
@@ -255,8 +268,14 @@ public class Fenetre extends JFrame
 		 JMenu outils = new JMenu("Outils");
 		 	JMenuItem ticket = new JMenuItem("Detection de ticket");
 			ticket.addActionListener(MenuListener);
-		 	JMenuItem filtres = new JMenuItem("Ajouter filtre");
-			filtres.addActionListener(MenuListener);
+			
+		 	JMenu filtres = new JMenu("Filtres");
+		 	JMenuItem enlever = new JMenuItem("Enlever tous les filtres");
+		 	enlever.addActionListener(MenuListener);
+		 	JMenuItem appliquer = new JMenuItem("Appliquer des filtres");
+			appliquer.addActionListener(MenuListener);
+			filtres.add(enlever);
+			filtres.add(appliquer);
 
 			JMenu comparer = new JMenu("Comparer");
 			JMenuItem egal = new JMenuItem("Trouver les similitudes");

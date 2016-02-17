@@ -11,20 +11,32 @@ public class Modele extends AbstractTableModel
 	
 	private final String[] entetes = {"Numero","Auteur","Date","Ligne","Commmentaire", "Ticket(s) repéré(s)"};
 	private Liste liste;
+	private Liste originale;
 	
 	public Modele()
 	{
 		
 	}
 	
-	public Modele(Liste liste)
+	public Modele(Liste l)
 	{
-		this.liste=liste;
+		this.liste=l;
+		this.originale=new Liste(l);
 	}
 	
 	public Liste getListe()
 	{
 		return liste;
+	}
+	
+	public Liste getOriginale()
+	{
+		return originale;
+	}
+	
+	public void retour()
+	{
+		this.liste=originale;
 	}
 	
 	public void setListe(Liste l)

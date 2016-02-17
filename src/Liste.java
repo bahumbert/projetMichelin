@@ -21,7 +21,7 @@ public class Liste
 	}
 	
 	public Liste(Liste l){
-		this.liste=l.liste;
+		this.liste=(ArrayList<Ligne>) l.liste.clone();
 	}
 	
 	public ArrayList<Ligne> getListe()
@@ -99,13 +99,13 @@ public class Liste
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "Trouv� " + tmp + "\n";
+				affichage += "Trouvé " + tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
 			}
 			else if (tmp == ""){
-				affichage += "Aucun ticket rep�r� dans cette ligne\n";
+				affichage += "Aucun ticket repéré dans cette ligne\n";
 			}
 		}
 		return affichage;
@@ -157,7 +157,6 @@ public class Liste
         }
     }
 	
-	/*Transforme un numero de ticket en int en supprimant les caract�res en d�but de chaine*/
 	public static int parseTicket(String s)
 	{
 		int res;
@@ -168,7 +167,6 @@ public class Liste
 		return res;
 	}
 	
-	/*Renvoie la liste comprenant les entr�es identiques des deux listes*/	
 	public Liste comparerIdentique(Liste liste2)
 	{
 		Liste l = new Liste();
@@ -203,7 +201,6 @@ public class Liste
 		return l;
 	}
 	
-	/*Renvoie la liste comprenant les entr�es diff�rentes des deux listes*/
 	public Liste comparerDifferent(Liste liste2)
 	{
 		Liste l = new Liste(liste2);
