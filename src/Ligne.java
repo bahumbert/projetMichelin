@@ -29,16 +29,6 @@ public class Ligne {
 		}
 		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
 	}
-
-	public Boolean isAuthor(String auteur)
-	{
-		Boolean ok = false;
-		
-		if (commentaire.indexOf(auteur) != -1)
-			ok=true;
-			
-		return ok;
-	}
 	
 	public String detectionTickets(String tickets){
 		
@@ -211,20 +201,6 @@ public class Ligne {
 	public Date getD() throws ParseException
 	{
 		return this.format.parse(date);
-	}
-	
-	public Boolean equals(Ligne l)
-	{
-		Boolean res=false;
-		
-		if(this.numeroVersion.equals(l.numeroVersion)&&
-				this.idUtilisateur.equals(l.idUtilisateur)&&
-				this.date.equals(l.date)&&
-				this.lignes.equals(l.lignes)&&
-				this.commentaire.equals(l.commentaire))
-			res=true;
-			
-		return res;
 	}
 
 }

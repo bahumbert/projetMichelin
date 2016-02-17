@@ -1,11 +1,8 @@
 
 import javax.swing.*;
-<<<<<<< HEAD
-=======
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
->>>>>>> origin/master
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -23,12 +20,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
-<<<<<<< HEAD
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-=======
->>>>>>> origin/master
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -40,27 +31,10 @@ public class Fenetre extends JFrame
 	 
 	 private void ajoutOnglet(File f)
 	 {
-		 int index;
 		 try{
 			 String nom=f.getName();
 			 onglets.addTab(nom, table(new Liste(f.getAbsolutePath())));
-			 index=(onglets.getTabCount())-1;
-			 onglets.setTabComponentAt(index,new Barre(onglets));
-			 onglets.setSelectedIndex(index);
-		 }
-		 catch(Exception e){
-			 throw e;
-		 }
-	 }
-	 
-	 private void ajoutOnglet(Liste l)
-	 {
-		 int index;
-		 try{
-			 index=(onglets.getTabCount());
-			 onglets.addTab("temp", table(l));
-			 onglets.setTabComponentAt(index,new Barre(onglets));
-			 onglets.setSelectedIndex(index);
+			 onglets.setTabComponentAt((onglets.getTabCount())-1,new Barre(onglets));
 		 }
 		 catch(Exception e){
 			 throw e;
@@ -81,7 +55,7 @@ public class Fenetre extends JFrame
 			 
 			 switch(event.getActionCommand())
 			 {
-			 case "Importer un fichier":
+			 	case "Importer un fichier":
 			 		JFileChooser fc = new JFileChooser(".");
 					 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers csv et xml.", "csv","xml");
 			         fc.addChoosableFileFilter(filter);
@@ -101,11 +75,7 @@ public class Fenetre extends JFrame
 				break;
 				
 			 	case "Importer depuis le serveur":
-<<<<<<< HEAD
-				 		
-=======
 			 					 		
->>>>>>> origin/master
 			 		JFileChooser fac = new JFileChooser(".");
 			 		fac.setCurrentDirectory(new java.io.File("."));
 			 		fac.setDialogTitle("Repository : ");
@@ -175,14 +145,10 @@ public class Fenetre extends JFrame
 				        }
 					}
 				 	break;
-<<<<<<< HEAD
-				
-=======
 			 	
->>>>>>> origin/master
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			
@@ -191,7 +157,7 @@ public class Fenetre extends JFrame
 			 		
 			 	case "Imprimer...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour imprimer", "Imprimer", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour imprimer", "Imprimer", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			
@@ -202,20 +168,23 @@ public class Fenetre extends JFrame
 			 		setVisible(false);
 			 		dispose();
 			 		break;
-
-			 /************ Menu Outils **************/
+			 		
+			 		
+			 		
+				
+			 		/************ Menu Outils **************/
 			 		
 			 	case "Ajouter filtre":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
 			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 			
 			 			String author="", day1="",day2="",number="";
-			 			String message = "SÃ©lectionnez les filtres souhaitÃ©s";
+			 			String message = "Sélectionnez les filtres souhaités";
 
 				 		JLabel auteur = new JLabel("Auteur");
 				 		JTextField champ= new JTextField();
@@ -225,7 +194,7 @@ public class Fenetre extends JFrame
 				 			date1.setFormats(format);
 				 			date2.setDate(Calendar.getInstance().getTime());
 				 			date2.setFormats(format);
-				 		JLabel ticket = new JLabel("NumÃ©ro de commit");
+				 		JLabel ticket = new JLabel("Numéro de ticket");
 				 		JTextField champ2= new JTextField();
 				 		
 				 		Object [] params ={message,auteur,champ,dates,date1,date2,ticket,champ2};
@@ -256,7 +225,7 @@ public class Fenetre extends JFrame
 			 	case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			
@@ -277,21 +246,13 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
-<<<<<<< HEAD
-							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
-=======
 							System.out.println("Le fichier des tickets n'a pas été trouvé");
->>>>>>> origin/master
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
-<<<<<<< HEAD
-			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
-=======
 			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
->>>>>>> origin/master
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
@@ -345,43 +306,9 @@ public class Fenetre extends JFrame
 			 		
 			 	break;
 			 	
-			 	case("Trouver les similitudes"):
-				case("Trouver les differences"):
-			 		if(onglets.getTabCount()==0)
-			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
-			 		}
-			 		else{
-			 			Modele m = getModele();
-			 			JFileChooser filec = new JFileChooser(".");
-						FileNameExtensionFilter filtre = new FileNameExtensionFilter("Fichiers csv.", "csv");
-				        filec.addChoosableFileFilter(filtre);
-				        filec.setAcceptAllFileFilterUsed(false);
-				         
-						if(filec.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-						{
-						 	File fichier;
-						 	String s;
-							fichier = filec.getSelectedFile();
-
-							Liste compare;
-							if(event.getActionCommand()=="Trouver les similitudes"){
-								compare=m.getListe().comparerIdentique(new Liste(fichier.getAbsolutePath()));
-								s="similitudes";
-							}
-							else{
-								compare=m.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
-								s="diffÃ©rences";
-							}
-							
-							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont Ã©tÃ© trouvÃ©es", "Comparaison", JOptionPane.DEFAULT_OPTION);
-
-							else
-								ajoutOnglet(compare);
-						}
-			 		}
-				break;
+			 	case "Comparer deux listes":
+			 		
+			 	break;
 			 }
 		 }
 	 };
@@ -416,15 +343,8 @@ public class Fenetre extends JFrame
 			ticket.addActionListener(MenuListener);
 		 	JMenuItem filtres = new JMenuItem("Ajouter filtre");
 			filtres.addActionListener(MenuListener);
-
-			JMenu comparer = new JMenu("Comparer");
-			JMenuItem egal = new JMenuItem("Trouver les similitudes");
-			egal.addActionListener(MenuListener);
-			JMenuItem different = new JMenuItem("Trouver les differences");
-			different.addActionListener(MenuListener);
-			comparer.add(egal);
-			comparer.add(different);
-			
+			JMenuItem comparer = new JMenuItem("Comparer deux listes");
+			comparer.addActionListener(MenuListener);
 			outils.add(ticket);
 			outils.add(filtres);
 			outils.add(comparer);
@@ -436,7 +356,7 @@ public class Fenetre extends JFrame
 		setJMenuBar(menuBar);
 	}
 	 
-	 private JScrollPane table(Liste liste)
+	private JScrollPane table(Liste liste)
 	{
 		JTable table;
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
