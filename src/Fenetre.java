@@ -12,7 +12,14 @@ import java.awt.Component;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -65,7 +72,7 @@ public class Fenetre extends JFrame
 			 
 			 switch(event.getActionCommand())
 			 {
-			 	case "Importer un fichier":
+			 case "Importer un fichier":
 			 		JFileChooser fc = new JFileChooser(".");
 					 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers csv et xml.", "csv","xml");
 			         fc.addChoosableFileFilter(filter);
@@ -79,14 +86,86 @@ public class Fenetre extends JFrame
 								ajoutOnglet(fichier);
 							}
 							catch(Exception e){
-								System.out.println("Erreur "+e.toString());
+								e.printStackTrace();
 							}
 						}
 				break;
+				
+			 	case "Importer depuis le serveur":
+				 		
+			 		JFileChooser fac = new JFileChooser(".");
+			 		fac.setCurrentDirectory(new java.io.File("."));
+			 		fac.setDialogTitle("Repository : ");
+			 		
+			 		fac.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+			 		fac.setAcceptAllFileFilterUsed(false);
+			 		
+			 		String emplacement = "";
+			 	    if (fac.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) { 
+			 	    	emplacement = fac.getSelectedFile().toString();
+			 	    }
+
+			 	    if (emplacement != ""){
+				 	    
+				 		String cmd[] = {"cmd.exe", "/C", "svn log --xml > svnlog.xml"};
+				 		try {
+							Runtime r = Runtime.getRuntime();
+							
+							/*String test = System.getenv("Path");
+							System.out.println(test);
+							System.out.println(test.length());*/
+							final Process p = r.exec(cmd, new String[]{"Path=C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN/bin"},  new File(emplacement));
+							
+							BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+							BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+							
+	
+							System.out.println("Commande :\n");
+	
+							int count = 0;
+							String s;
+							String result = "";
+								while ((s = stdInput.readLine()) != null) {
+									count++;
+									result = result + s + "\n";
+								}
+							
+							stdInput.close();
+							
+								count = 0;
+								String err = "";
+								while ((s = stdErr.readLine()) != null) {
+									count++;
+									err = err + s + "\n";
+								}
+								
+							stdErr.close();
+							
+							//System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
+							
+							if (err.equals("")){
+								File fichier = new File(emplacement+"\\svnlog.xml");
+								try{
+									ajoutOnglet(fichier);
+								}
+								catch(Exception e){
+									System.out.println("Erreur "+e.toString());
+								}
+							}
+							else {
+								JOptionPane.showMessageDialog(onglets, "Erreur : "+err);
+							}
+				 		}
+				 		catch(Exception e) {
+							System.out.println("erreur d'execution " + cmd + e.toString());
+				        }
+					}
+				 	break;
+				
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			
@@ -95,7 +174,7 @@ public class Fenetre extends JFrame
 			 		
 			 	case "Imprimer...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour imprimer", "Imprimer", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour imprimer", "Imprimer", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			
@@ -112,14 +191,14 @@ public class Fenetre extends JFrame
 			 	case "Ajouter filtre":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
 			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 			
 			 			String author="", day1="",day2="",number="";
-			 			String message = "Sélectionnez les filtres souhaités";
+			 			String message = "SÃ©lectionnez les filtres souhaitÃ©s";
 
 				 		JLabel auteur = new JLabel("Auteur");
 				 		JTextField champ= new JTextField();
@@ -129,7 +208,7 @@ public class Fenetre extends JFrame
 				 			date1.setFormats(format);
 				 			date2.setDate(Calendar.getInstance().getTime());
 				 			date2.setFormats(format);
-				 		JLabel ticket = new JLabel("Numéro de commit");
+				 		JLabel ticket = new JLabel("NumÃ©ro de commit");
 				 		JTextField champ2= new JTextField();
 				 		
 				 		Object [] params ={message,auteur,champ,dates,date1,date2,ticket,champ2};
@@ -160,25 +239,81 @@ public class Fenetre extends JFrame
 			 	case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
-			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
-				 		JTextField pattern= new JTextField();
+			 			
+			 			InputStream ips;
+			 			String tickets = "";
+						try {
+							ips = new FileInputStream("./tickets.txt");
+							InputStreamReader ipsr=new InputStreamReader(ips);
+							BufferedReader br=new BufferedReader(ipsr);
+							//System.out.println("Fichier ouvert");
+							
+				 			String ligne = "";
+				 			
+							while ((ligne=br.readLine())!=null){
+								tickets += ligne;
+							}
+							
+							br.close(); 
+						} 
+						catch (FileNotFoundException e) {
+							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
+						} 
+						catch (IOException e) {
+							e.printStackTrace();
+						} 
+
+			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
+				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
-				 		JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
-				 	
-				 		Modele model = getModele();
-				 		String affichage = model.getListe().detectionTickets(pattern.getText());
-						
-				 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
-				 		JTable t = (JTable) s.getViewport().getView();
+				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 				 		
-					    TableCellRenderer renderer2 = new CustomTableCellRenderer();
-					
-					    t.setDefaultRenderer(Object.class, renderer2);
+			 			Modele model = getModele();
+			 			
+				 		if (res == 0 && !pattern.getText().equals("")){
+					 		
+					 		for (int row = 0; row < model.getRowCount(); row++){
+					 			model.setValueAt("", row, 5);
+					 		}
+					 		
+					 		File fichier = new File("./tickets.txt");
+					 		try {
+								FileWriter fw = new FileWriter(fichier);
+								fw.write(pattern.getText());
+								fw.close();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+					 		
+					 		
+					 		/*String affichage =*/ model.getListe().detectionTickets(pattern.getText());
+							
+					 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
+					 		JTable t = (JTable) s.getViewport().getView();
+					 		
+						    TableCellRenderer renderer2 = new CustomTableCellRenderer();
+						
+						    t.setDefaultRenderer(Object.class, renderer2);
 
+				 		}
+				 		else if (pattern.getText().equals("")){
+
+				 			for (int row = 0; row < model.getRowCount(); row++){
+					 			model.setValueAt(" ", row, 5);
+					 		}
+				 			
+				 			JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
+					 		JTable t = (JTable) s.getViewport().getView();
+				 			TableCellRenderer renderer2 = new CustomTableCellRenderer();
+							
+						    t.setDefaultRenderer(Object.class, renderer2);
+				 			
+				 		}
 				 		model.fireTableDataChanged();
 
 			 		}
@@ -189,7 +324,7 @@ public class Fenetre extends JFrame
 				case("Trouver les differences"):
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit êre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele m = getModele();
@@ -211,11 +346,11 @@ public class Fenetre extends JFrame
 							}
 							else{
 								compare=m.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
-								s="différences";
+								s="diffÃ©rences";
 							}
 							
 							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont été trouvées", "Comparaison", JOptionPane.DEFAULT_OPTION);
+								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont Ã©tÃ© trouvÃ©es", "Comparaison", JOptionPane.DEFAULT_OPTION);
 
 							else
 								ajoutOnglet(compare);
@@ -235,9 +370,9 @@ public class Fenetre extends JFrame
 		 nouveau.add(ouvrir);
 		 ouvrir.addActionListener(MenuListener);
 		 	
-		/* JMenuItem log = new JMenuItem("Importer depuis le serveur");
+		 JMenuItem log = new JMenuItem("Importer depuis le serveur");
 		 nouveau.add(log);
-		 log.addActionListener(MenuListener);*/
+		 log.addActionListener(MenuListener);
 	 
 		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder...");
 		 sauvegarder.addActionListener(MenuListener);
@@ -276,7 +411,7 @@ public class Fenetre extends JFrame
 		setJMenuBar(menuBar);
 	}
 	 
-	private JScrollPane table(Liste liste)
+	 private JScrollPane table(Liste liste)
 	{
 		JTable table;
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
