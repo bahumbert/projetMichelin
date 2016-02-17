@@ -27,6 +27,10 @@ public class Modele extends AbstractTableModel
 		return liste;
 	}
 	
+	public void setListe(Liste l)
+	{
+		this.liste=l;
+	}
 
 	@Override
 	public int getColumnCount() {

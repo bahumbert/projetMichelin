@@ -202,5 +202,19 @@ public class Ligne {
 	{
 		return this.format.parse(date);
 	}
+	
+	public Boolean equals(Ligne l)
+	{
+		Boolean res=false;
+		
+		if(this.numeroVersion.equals(l.numeroVersion)&&
+				this.idUtilisateur.equals(l.idUtilisateur)&&
+				this.date.equals(l.date)&&
+				this.lignes.equals(l.lignes)&&
+				this.commentaire.equals(l.commentaire))
+			res=true;
+			
+		return res;
+	}
 
 }
