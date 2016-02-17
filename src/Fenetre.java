@@ -1,5 +1,11 @@
 
 import javax.swing.*;
+<<<<<<< HEAD
+=======
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+>>>>>>> origin/master
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
@@ -17,9 +23,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+<<<<<<< HEAD
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+=======
+>>>>>>> origin/master
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -92,7 +101,11 @@ public class Fenetre extends JFrame
 				break;
 				
 			 	case "Importer depuis le serveur":
+<<<<<<< HEAD
 				 		
+=======
+			 					 		
+>>>>>>> origin/master
 			 		JFileChooser fac = new JFileChooser(".");
 			 		fac.setCurrentDirectory(new java.io.File("."));
 			 		fac.setDialogTitle("Repository : ");
@@ -162,7 +175,11 @@ public class Fenetre extends JFrame
 				        }
 					}
 				 	break;
+<<<<<<< HEAD
 				
+=======
+			 	
+>>>>>>> origin/master
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
@@ -260,13 +277,21 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
+<<<<<<< HEAD
 							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
+=======
+							System.out.println("Le fichier des tickets n'a pas été trouvé");
+>>>>>>> origin/master
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
+<<<<<<< HEAD
 			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
+=======
+			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
+>>>>>>> origin/master
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};

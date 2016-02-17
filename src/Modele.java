@@ -1,5 +1,10 @@
 import javax.swing.table.AbstractTableModel;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
+import org.apache.commons.*;
+import java.lang.Object;
+
 public class Modele extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
@@ -57,7 +62,7 @@ public class Modele extends AbstractTableModel
 			return liste.getListe().get(rowIndex).getCommentaire();
 			
 		case 5:
-			return liste.getListe().get(rowIndex).getTicket();
+			return liste.getListe().get(rowIndex).getTickets();
 			
 		default:
 			throw new IllegalArgumentException();
@@ -94,8 +99,8 @@ public class Modele extends AbstractTableModel
 			break;
 			
 		case 5:
-			liste.getListe().get(row).setTicket((String)value);
-			// Fonction gestion avancée 
+			liste.getListe().get(row).setTickets((String)value);
+			//gestionTicketsAvancee(row, (String)value);
 			break;
 			
 		default:
@@ -104,16 +109,46 @@ public class Modele extends AbstractTableModel
 	    fireTableCellUpdated(row, col);	  
 	 }
 	
-	/*@Override
-	public Class<? extends Object> getColumnClass(int c){
-		Object object = getValueAt(0, c);
-	    if(object == null) {
-	        return Object.class;
-	    if(getValueAt(0, c) instanceof IColorable) {
-	        return ICarPart.class;
-	    } else {
-	        return getValueAt(0, c).getClass();
-	    }
+	
+	/*private void gestionTicketsAvancee(int row, String value){
+		/*String tickets = (String) this.getValueAt(row,5);
+		//System.out.println(tickets);
+		
+		System.out.println(row);
+		
+		int count = 0;
+		int max = 0;
+		String ticketRepete = "";
+		
+		String[] listTickets = tickets.split(",");
+		for(String t : listTickets){
+			
+			count = org.apache.commons.lang3.StringUtils.countMatches((CharSequence)tickets, (CharSequence)t);
+			
+			if (count > max){
+				ticketRepete = t;
+				count = max;
+			}
+		}
+		
+		if (max != 0){
+			this.setValueAt(ticketRepete,row,5);
+			System.out.println("max!=0 row="+row);
+		}
+		else if (tickets.contains(",")) {
+			this.setValueAt(tickets.substring(0, tickets.indexOf(",")),row,5);
+			System.out.println(", row="+row);
+		}
+		else{
+			this.setValueAt(tickets,row,5);
+			System.out.println("1 row="+row);
+		}
+		*/
+		
+		/*System.out.println(row);
+		System.out.println(value);
+		
 	}*/
+
 	
 }
