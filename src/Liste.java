@@ -20,6 +20,10 @@ public class Liste
 		liste=new ArrayList<Ligne>();
 	}
 	
+	public Liste(Liste l){
+		this.liste=l.liste;
+	}
+	
 	public ArrayList<Ligne> getListe()
 	{
 		return this.liste;
@@ -122,7 +126,7 @@ public class Liste
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (auteur!="" && !(ligne.getIdUtilisateur().contains(auteur)))
+		    if (auteur!="" && (!(ligne.getIdUtilisateur().contains(auteur))))
 		        it.remove();
 		    
 		    else if (version!="" && !ligne.getNumeroVersion().contains(version))
@@ -153,4 +157,95 @@ public class Liste
             return filename.substring(index + 1);
         }
     }
+	
+	/*Transforme un numero de ticket en int en supprimant les caractères en début de chaine*/
+	public static int parseTicket(String s)
+	{
+		int res;
+		
+		String[] tab =s.split("[a-z]");
+		res=Integer.parseInt(tab[tab.length-1]);
+		
+		return res;
+	}
+	
+	/*Renvoie la liste comprenant les entrées identiques des deux listes*/	
+	public Liste comparerIdentique(Liste liste2)
+	{
+		Liste l = new Liste();
+		int i=0, j=0;
+		int length1=this.liste.size();
+		int length2=liste2.liste.size();
+		int version1, version2;
+		Boolean fin;
+		
+		version2=parseTicket(liste2.liste.get(j).numeroVersion);
+		
+		while(i<length1)
+		{
+			version1=parseTicket(this.liste.get(i).numeroVersion);
+			j=0;
+			fin =false;
+			while((j<length2) && (!fin))
+			{
+				version2=parseTicket(liste2.liste.get(j).numeroVersion);
+				if(version1==version2)
+				{
+					if(this.liste.get(i).equals(liste2.liste.get(j)))
+					{
+						l.liste.add(this.liste.get(i));
+						fin =true;
+					}
+				}				
+				j++;
+			}
+			i++;
+		}
+		return l;
+	}
+	
+	/*Renvoie la liste comprenant les entrées différentes des deux listes*/
+	public Liste comparerDifferent(Liste liste2)
+	{
+		Liste l = new Liste(liste2);
+		int i=0, j=0;
+		int length1=this.liste.size();
+		int length2=l.liste.size();
+		int version1, version2;
+		Boolean trouve;
+		
+		version2=parseTicket(l.liste.get(j).numeroVersion);
+		
+		while(i<length1)
+		{
+			version1=parseTicket(this.liste.get(i).numeroVersion);
+			j=0;
+			trouve=false;
+			while((j<length2) && (!trouve))
+			{
+				version2=parseTicket(l.liste.get(j).numeroVersion);
+				if(version1==version2)
+				{
+					if(this.liste.get(i).equals(l.liste.get(j)))
+					{
+						trouve =true;
+						l.liste.remove(j);
+					}
+					else
+					{
+						j++;
+					}
+				}
+				else
+					j++;
+			}
+			if(!trouve)
+			{
+				l.liste.add(this.liste.get(i));
+			}
+			i++;
+		}
+		return l;
+	}
+
 }
