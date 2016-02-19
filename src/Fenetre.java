@@ -289,12 +289,6 @@ public class Fenetre extends JFrame
 				 		Object [] parameters ={msg,pattern};
 				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 
-
-
-
-
-
-				 		
 			 			Modele model = getModele();
 			 			
 				 		if (res == 0 && !pattern.getText().equals("")){
@@ -312,19 +306,15 @@ public class Fenetre extends JFrame
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-					 		
-					 		
-					 		/*String affichage =*/ model.getListe().detectionTickets(pattern.getText());
+
+					 		/*String affichage =*/model.getListe().detectionTickets(pattern.getText());
 							
 					 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
 					 		JTable t = (JTable) s.getViewport().getView();
 					 		
 						    TableCellRenderer renderer2 = new CustomTableCellRenderer();
-
-						
+						    //t.getColumnModel().getColumn(4).setCellRenderer(renderer2);
 						    t.setDefaultRenderer(Object.class, renderer2);
-
-
 				 		}
 				 		else if (pattern.getText().equals("")){
 
@@ -335,9 +325,9 @@ public class Fenetre extends JFrame
 				 			JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
 					 		JTable t = (JTable) s.getViewport().getView();
 				 			TableCellRenderer renderer2 = new CustomTableCellRenderer();
-							
+				 			//t.getColumnModel().getColumn(4).setCellRenderer(renderer2);
+				 		      
 						    t.setDefaultRenderer(Object.class, renderer2);
-				 			
 				 		}
 				 		model.fireTableDataChanged();
 
@@ -453,12 +443,14 @@ public class Fenetre extends JFrame
 		table = new JTable(modele);
 		table.getTableHeader().setDefaultRenderer(renderer);
 		 
-		table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
-		 
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF );
+		table.getColumnModel().getColumn(5).setMinWidth(100);
 		for (int column = 0; column < table.getColumnCount(); column++)
 		{
 			TableColumn tableColumn = table.getColumnModel().getColumn(column);
 			int preferredWidth = tableColumn.getMinWidth();
+			tableColumn.setMaxWidth(500);
+			
 			int maxWidth = tableColumn.getMaxWidth();
 		 
 		    for (int row = 0; row < table.getRowCount(); row++)
@@ -476,6 +468,9 @@ public class Fenetre extends JFrame
 		    }
 		    tableColumn.setPreferredWidth( preferredWidth +20);
 		}
+		
+		table.getColumnModel().getColumn(4).setCellRenderer(renderer);
+		
 		JScrollPane pane = new JScrollPane(table,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
