@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre7"/>
-	<classpathentry kind="lib" path="C:/Users/Anne-Lise/Documents/GitHub/projetMichelin/swingx-all-1.6.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Anne-Lise/Documents/GitHub/projetMichelin/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/StarOri/workspace/projetMichelin/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/StarOri/workspace/projetMichelin/swingx-all-1.6.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

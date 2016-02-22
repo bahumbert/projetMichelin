@@ -1,6 +1,5 @@
 import javax.swing.table.AbstractTableModel;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 
 import org.apache.commons.*;
 import java.lang.Object;
@@ -124,47 +123,5 @@ public class Modele extends AbstractTableModel
 		}
 	    fireTableCellUpdated(row, col);	  
 	 }
-	
-	
-	/*private void gestionTicketsAvancee(int row, String value){
-		/*String tickets = (String) this.getValueAt(row,5);
-		//System.out.println(tickets);
-		
-		System.out.println(row);
-		
-		int count = 0;
-		int max = 0;
-		String ticketRepete = "";
-		
-		String[] listTickets = tickets.split(",");
-		for(String t : listTickets){
-			
-			count = org.apache.commons.lang3.StringUtils.countMatches((CharSequence)tickets, (CharSequence)t);
-			
-			if (count > max){
-				ticketRepete = t;
-				count = max;
-			}
-		}
-		
-		if (max != 0){
-			this.setValueAt(ticketRepete,row,5);
-			System.out.println("max!=0 row="+row);
-		}
-		else if (tickets.contains(",")) {
-			this.setValueAt(tickets.substring(0, tickets.indexOf(",")),row,5);
-			System.out.println(", row="+row);
-		}
-		else{
-			this.setValueAt(tickets,row,5);
-			System.out.println("1 row="+row);
-		}
-		*/
-		
-		/*System.out.println(row);
-		System.out.println(value);
-		
-	}*/
-
 	
 }
