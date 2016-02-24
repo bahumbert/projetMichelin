@@ -180,7 +180,21 @@ public class Fenetre extends JFrame
 							e.printStackTrace();
 						}
 			 		}
-			 		break;
+			 	break;
+			 	
+			 	case "Exporter les tickets":
+			 		if(onglets.getTabCount()==0){
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else{
+			 			Modele m = getModele();
+						try {
+							m.getListe().export();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+			 		}
+			 	break;
 			 		
 			 	case "Imprimer...":
 			 		if(onglets.getTabCount()==0){
@@ -400,6 +414,10 @@ public class Fenetre extends JFrame
 		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder...");
 		 sauvegarder.addActionListener(MenuListener);
 		 nouveau.add(sauvegarder);
+		 
+		 JMenuItem exporter = new JMenuItem("Exporter les tickets");
+		 exporter.addActionListener(MenuListener);
+		 nouveau.add(exporter);
 				
 		 JMenuItem imprimer = new JMenuItem("Imprimer...");
 		 imprimer.addActionListener(MenuListener);

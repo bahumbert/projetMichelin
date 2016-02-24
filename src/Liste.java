@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -12,6 +14,7 @@ import java.awt.FileDialog;
 
 //import java.util.Scanner;
 import java.io.*;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
@@ -255,7 +258,48 @@ public class Liste
 		return l;
 	}
 	
-	
+	public void export() throws IOException
+	{
+		Ligne ligne;
+		Set<String> lines = new LinkedHashSet();
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+		fd.setDirectory(".");
+		fd.setVisible(true);
+		
+		String path = fd.getDirectory();
+		String filename = fd.getFile();
+		String ext = getExtension(filename);
+		String[] split;
+		String temp;
+		
+		if(!ext.equals("txt"))
+		{
+			filename = filename.replaceFirst("[.][^.]+$", "");
+			filename+=".txt";
+		}
+		
+		FileWriter fw = new FileWriter(path+filename,false);
+		BufferedWriter output = new BufferedWriter(fw);
+		
+		for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
+    	{
+			ligne=it.next();
+			if(!ligne.getTickets().equals(""))
+			{
+				split=ligne.getTickets().split("\\(");
+				split=split[0].split(" ");
+				for(String ticket:split)
+					//La redondance est supprimée
+					lines.add(ticket+"\n");
+			}
+    	}
+		
+		for (String line : lines)
+		    output.write(line);
+		
+		output.flush();
+		output.close();
+	}
 	
 	public void sauver() throws IOException
 	{
