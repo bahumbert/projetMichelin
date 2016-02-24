@@ -2,12 +2,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import org.w3c.dom.DOMException;
+
+import java.awt.FileDialog;
 
 //import java.util.Scanner;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 
 public class Liste 
 {
@@ -125,8 +132,12 @@ public class Liste
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (auteur!="" && (!(ligne.getIdUtilisateur().contains(auteur))))
-		        it.remove();
+			
+			if(auteur!="")
+			{
+				if(!(ligne.getIdUtilisateur().contains(auteur)) && (!(ligne.getCommentaire().contains(auteur))))
+						it.remove();
+			}
 		    
 		    else if (version!="" && !ligne.getNumeroVersion().contains(version))
 		    	it.remove();
@@ -242,6 +253,57 @@ public class Liste
 			i++;
 		}
 		return l;
+	}
+	
+	
+	
+	public void sauver() throws IOException
+	{
+		Ligne ligne;
+		
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+		fd.setDirectory(".");
+		fd.setVisible(true);
+		
+		String path = fd.getDirectory();
+		String filename = fd.getFile();
+		//File file = new File(path+filename);
+		
+		FileWriter fw = new FileWriter(path+filename,false);
+		BufferedWriter output = new BufferedWriter(fw);
+		String ext = getExtension(filename);
+		
+		/*if (filename.lastIndexOf(".") > 0) {
+		    String ext = filename.substring(filename.lastIndexOf("."));*/
+		    if (ext.equals("csv")) 
+		    {
+		    	for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
+		    	{
+					ligne=it.next();
+					output.write(ligne.getNumeroVersion()+";"+ligne.getIdUtilisateur()+";"+ligne.getDate()+";"+ligne.getLignes()+";"+ligne.getCommentaire()+"\n");
+		    	}
+		    }
+		    else
+		    	if(ext.equals("xml"))
+		    	{
+		    		for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
+			    	{
+						ligne=it.next();
+			    	}
+		    	}
+		//} 
+		else {
+			//export csv par défault
+			System.out.println("défault");
+			for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) {
+				ligne=it.next();
+				output.write(ligne.getNumeroVersion()+";"+ligne.getIdUtilisateur()+";"+ligne.getDate()+";"+ligne.getLignes()+";"+ligne.getCommentaire()+"\n");
+			}
+		}
+		
+		output.flush();
+		output.close();
+		
 	}
 
 }
