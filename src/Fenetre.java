@@ -277,7 +277,7 @@ public class Fenetre extends JFrame
 				case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit �re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour trouver des tickets", "Tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			
@@ -304,18 +304,18 @@ public class Fenetre extends JFrame
 							e.printStackTrace();
 						} 
 
-			 			String msg = "Entrer le(s) ticket(s) souhait�(s)";
+			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
-				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
+				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Tickets", JOptionPane.OK_CANCEL_OPTION);
 
 			 			Modele model = getModele();
 			 			
 				 		if (res == 0 && !pattern.getText().equals("")){
 					 		
 					 		for (int row = 0; row < model.getRowCount(); row++){
-					 			model.setValueAt("", row, 5);
+					 			model.setValueAt("", row, model.getColumnCount()-1);
 					 		}
 					 		
 					 		File fichier = new File("./tickets.txt");
@@ -336,12 +336,12 @@ public class Fenetre extends JFrame
 						    TableCellRenderer renderer2 = new CustomTableCellRenderer();
 						    
 						    t.setDefaultRenderer(Object.class, renderer2);
-						    //t.getColumnModel().getColumn(4).setCellRenderer(renderer2);
+						    //t.getColumnModel().getColumn(3).setCellRenderer(renderer2);
 				 		}
 				 		else if (pattern.getText().equals("")){
 
 				 			for (int row = 0; row < model.getRowCount(); row++){
-					 			model.setValueAt(" ", row, 5);
+					 			model.setValueAt(" ", row, model.getColumnCount()-1);
 					 		}
 				 			
 				 			JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
@@ -349,7 +349,7 @@ public class Fenetre extends JFrame
 				 			TableCellRenderer renderer2 = new CustomTableCellRenderer();
 				 		      
 						    t.setDefaultRenderer(Object.class, renderer2);
-						    //t.getColumnModel().getColumn(4).setCellRenderer(renderer2);
+				 			//t.getColumnModel().getColumn(3).setCellRenderer(renderer2);
 				 		}
 				 		model.fireTableDataChanged();
 
@@ -461,7 +461,7 @@ public class Fenetre extends JFrame
 	 public static void resizeColumnWidth(JTable table) {
 		    int cumulativeActual = 0;
 		    int padding = 15;
-		    int max =500;
+		    int max =700;
 		    for (int columnIndex = 0; columnIndex < table.getColumnCount(); columnIndex++) {
 		        int width = 50; // Taille min
 		        
@@ -486,28 +486,19 @@ public class Fenetre extends JFrame
 		    }
 		}
 	 
-	 
-	 
-	 /*public static void setJTableColumnsWidth(JTable table, int tablePreferredWidth, double... percentages) {
-		    double total = 0;
-		    int padding = 20;
-		    int cumulativeActual = 0;
-		    
-		    for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-		        total += percentages[i];
-		    }
-		 
-		    for (int i = 0; i < table.getColumnModel().getColumnCount(); i++) {
-		    	int width =50;
-		        TableColumn column = table.getColumnModel().getColumn(i);
-		        for (int row = 0; row < table.getRowCount(); row++) {
-		            TableCellRenderer renderer = table.getCellRenderer(row, i);
-		            Component comp = table.prepareRenderer(renderer, row, i);
-		            width = Math.max(comp.getPreferredSize().width + padding, width);
-		        }
-		        column.setPreferredWidth((int)(width * (percentages[i] / total)));
-		    }
-	}*/
+	 private void updateRowHeights(JTable table)
+	 {
+	     for (int row = 0; row < table.getRowCount(); row++)
+	     {
+	         int rowHeight = table.getRowHeight();
+	         int column = 3;
+	         
+	         Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
+	         rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+
+	         table.setRowHeight(row, rowHeight);
+	     }
+	 }
 	 
 	private JScrollPane table(Liste liste)
 	{
@@ -524,12 +515,10 @@ public class Fenetre extends JFrame
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		 
-		//table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		resizeColumnWidth(table);
-
-		//setJTableColumnsWidth(table, 300, 5, 5, 25, 5,30,30);
+		updateRowHeights(table);
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-	
+		
 		return pane;
 	}
 	

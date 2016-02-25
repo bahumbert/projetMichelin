@@ -9,7 +9,7 @@ public class Modele extends AbstractTableModel
 {
 	private static final long serialVersionUID = 1L;
 	
-	private final String[] entetes = {"Numero","Auteur","Date","Ligne","Commmentaire", "Ticket(s) repéré(s)"};
+	private final String[] entetes = {"Numero","Auteur","Date",/*"Ligne",*/"Commmentaire", "Ticket(s) repéré(s)"};
 	private Liste liste;
 	private Liste originale;
 	
@@ -71,13 +71,13 @@ public class Modele extends AbstractTableModel
 		case 2:
 			return liste.getListe().get(rowIndex).getDate();
 
-		case 3:
-			return liste.getListe().get(rowIndex).getLignes();
+		/*case 3:
+			return liste.getListe().get(rowIndex).getLignes();*/
 
-		case 4:
+		case 3:
 			return liste.getListe().get(rowIndex).getCommentaire();
 			
-		case 5:
+		case 4:
 			return liste.getListe().get(rowIndex).getTickets();
 			
 		default:
@@ -106,15 +106,15 @@ public class Modele extends AbstractTableModel
 			liste.getListe().get(row).setDate((String)value);
 			break;
 			
-		case 3:
+		/*case 3:
 			liste.getListe().get(row).setLignes((String)value);
-			break;
+			break;*/
 			
-		case 4:
+		case 3:
 			liste.getListe().get(row).setCommentaire((String)value);
 			break;
 			
-		case 5:
+		case 4:
 			liste.getListe().get(row).setTickets((String)value);
 			//gestionTicketsAvancee(row, (String)value);
 			break;
