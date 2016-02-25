@@ -72,7 +72,7 @@ public class ParseXML {
 				    System.out.println("msg : " + msg.getTextContent());*/
 	
 				    try{
-				    	liste.add(new Ligne(logentry.getAttribute("revision")+";"+author.getTextContent()+";"+date.getTextContent()+";1;"+msg.getTextContent()));
+				    	liste.add(new Ligne(logentry.getAttribute("revision")+";"+author.getTextContent()+";"+date.getTextContent()+";"+msg.getTextContent()));
 				    }
 				    catch (ArrayIndexOutOfBoundsException e) {
 				    	System.out.println("Ligne non valide et ignorée");

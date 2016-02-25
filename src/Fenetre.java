@@ -302,7 +302,7 @@ public class Fenetre extends JFrame
 				 		if (res == 0 && !pattern.getText().equals("")){
 					 		
 					 		for (int row = 0; row < model.getRowCount(); row++){
-					 			model.setValueAt("", row, 5);
+					 			model.setValueAt("", row, 4);
 					 		}
 					 		
 					 		File fichier = new File("./tickets.txt");
@@ -331,7 +331,7 @@ public class Fenetre extends JFrame
 				 		else if (pattern.getText().equals("")){
 
 				 			for (int row = 0; row < model.getRowCount(); row++){
-					 			model.setValueAt(" ", row, 5);
+					 			model.setValueAt(" ", row, 4);
 					 		}
 				 			
 				 			JScrollPane s = (JScrollPane) onglets.getSelectedComponent();

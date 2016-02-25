@@ -10,7 +10,7 @@ public class Ligne {
 	String idUtilisateur;
 	String date;
 	Date d;
-	String lignes;
+	//String lignes;
 	String commentaire;
 	String tickets;
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
@@ -18,13 +18,13 @@ public class Ligne {
 	public Ligne(String ligne) throws Exception{
 		String[] split = ligne.split(";");
 		//System.out.println(split[0]+ " " + split[1] + " " + split[2] +" "+ split[3]);
-		if (split.length >= 5 && split[4] != null){
+		if (split.length >= 4 && split[3] != null){
 		//System.out.println(split[4]);
 			this.numeroVersion = split[0];
 			this.idUtilisateur = split[1];
 			this.date = split[2];
-			this.lignes = split[3];
-			this.commentaire = split[4];
+			//this.lignes = split[3];
+			this.commentaire = split[3];
 			this.tickets = "";
 		}
 		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
@@ -131,7 +131,7 @@ public class Ligne {
 
 	
 	public String toString(){
-		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " " + this.lignes + " " + this.commentaire;
+		return this.numeroVersion + " " + this.idUtilisateur + " " + this.date + " "/* + this.lignes + " "*/ + this.commentaire;
 	}
 	
 	public String getDate()
@@ -139,10 +139,10 @@ public class Ligne {
 		return this.date;
 	}
 	
-	public String getLignes()
+	/*public String getLignes()
 	{
 		return this.lignes;
-	}
+	}*/
 	
 	public String getCommentaire()
 	{
@@ -186,9 +186,9 @@ public class Ligne {
 		this.d = d;
 	}
 
-	public void setLignes(String lignes) {
+	/*public void setLignes(String lignes) {
 		this.lignes = lignes;
-	}
+	}*/
 
 	public void setCommentaire(String commentaire) {
 		this.commentaire = commentaire;
@@ -210,7 +210,7 @@ public class Ligne {
 		if(this.numeroVersion.equals(l.numeroVersion)&&
 				this.idUtilisateur.equals(l.idUtilisateur)&&
 				this.date.equals(l.date)&&
-				this.lignes.equals(l.lignes)&&
+				//this.lignes.equals(l.lignes)&&
 				this.commentaire.equals(l.commentaire))
 			res=true;
 			
