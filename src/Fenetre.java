@@ -135,7 +135,7 @@ public class Fenetre extends JFrame
 								br.close(); 
 							} 
 							catch (FileNotFoundException e) {
-								System.out.println("Le fichier de configuration n'a pas été trouvé");
+								System.out.println("Le fichier de configuration n'a pas ï¿½tï¿½ trouvï¿½");
 								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
 							} 
 							catch (IOException e) {
@@ -199,12 +199,31 @@ public class Fenetre extends JFrame
 
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
-			 			
+			 			Modele m = getModele();
+						try {
+							m.getListe().sauver();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 			 		}
-			 		break;
+			 	break;
+			 	
+			 	case "Exporter les tickets":
+			 		if(onglets.getTabCount()==0){
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else{
+			 			Modele m = getModele();
+						try {
+							m.getListe().export();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+			 		}
+			 	break;
 			 		
 			 	case "Imprimer...":
 			 		if(onglets.getTabCount()==0){
@@ -274,7 +293,7 @@ public class Fenetre extends JFrame
 			 	case "Enlever tous les filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
@@ -287,7 +306,7 @@ public class Fenetre extends JFrame
 				case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			
@@ -308,13 +327,13 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
-							System.out.println("Le fichier des tickets n'a pas été trouvé");
+							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
-			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
+			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
@@ -380,7 +399,7 @@ public class Fenetre extends JFrame
 				case("Trouver les differences"):
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele mo = getModele();
@@ -402,11 +421,11 @@ public class Fenetre extends JFrame
 							}
 							else{
 								compare=mo.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
-								s="différences";
+								s="diffï¿½rences";
 							}
 							
 							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont été trouvées", "Comparaison", JOptionPane.DEFAULT_OPTION);
+								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont ï¿½tï¿½ trouvï¿½es", "Comparaison", JOptionPane.DEFAULT_OPTION);
 
 							else
 								ajoutOnglet(compare);
@@ -433,6 +452,10 @@ public class Fenetre extends JFrame
 		 JMenuItem sauvegarder = new JMenuItem("Sauvegarder...");
 		 sauvegarder.addActionListener(MenuListener);
 		 nouveau.add(sauvegarder);
+		 
+		 JMenuItem exporter = new JMenuItem("Exporter les tickets");
+		 exporter.addActionListener(MenuListener);
+		 nouveau.add(exporter);
 				
 		 JMenuItem imprimer = new JMenuItem("Imprimer...");
 		 imprimer.addActionListener(MenuListener);
@@ -473,6 +496,48 @@ public class Fenetre extends JFrame
 		setJMenuBar(menuBar);
 	}
 	 
+	 public static void resizeColumnWidth(JTable table) {
+		    int cumulativeActual = 0;
+		    int padding = 15;
+		    int max =700;
+		    for (int columnIndex = 0; columnIndex < table.getColumnCount(); columnIndex++) {
+		        int width = 50; // Taille min
+		        
+		        TableColumn column =table.getColumnModel().getColumn(columnIndex);
+		        for (int row = 0; row < table.getRowCount(); row++) {
+		            TableCellRenderer renderer = table.getCellRenderer(row, columnIndex);
+		            Component comp = table.prepareRenderer(renderer, row, columnIndex);
+		            width = Math.max(comp.getPreferredSize().width + padding, width);
+		        }
+		        
+		        if (columnIndex < table.getColumnCount() - 1) {
+		        	if (width>max){
+		        		width=max;
+		        	}
+		            column.setPreferredWidth(width);
+		            column.setMaxWidth(width);
+		            cumulativeActual += column.getWidth();
+		        } else {
+		        	//DerniÃ¨re colonne 
+		            column.setPreferredWidth((int) table.getSize().getWidth() - cumulativeActual);
+		        }
+		    }
+		}
+	 
+	 private void updateRowHeights(JTable table)
+	 {
+	     for (int row = 0; row < table.getRowCount(); row++)
+	     {
+	         int rowHeight = table.getRowHeight();
+	         int column = 3;
+	         
+	         Component comp = table.prepareRenderer(table.getCellRenderer(row, column), row, column);
+	         rowHeight = Math.max(rowHeight, comp.getPreferredSize().height);
+
+	         table.setRowHeight(row, rowHeight);
+	     }
+	 }
+	 
 	private JScrollPane table(Liste liste)
 	{
 		JTable table;
@@ -482,38 +547,16 @@ public class Fenetre extends JFrame
 	        
 		Modele modele=new Modele(liste);
 		table = new JTable(modele);
-		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modele);
-		 
-	    table.setRowSorter(sorter);
-
 		table.getTableHeader().setDefaultRenderer(renderer);
-		 
-		table.setAutoResizeMode( JTable.AUTO_RESIZE_OFF );
-		 
-		for (int column = 0; column < table.getColumnCount(); column++)
-		{
-			TableColumn tableColumn = table.getColumnModel().getColumn(column);
-			int preferredWidth = tableColumn.getMinWidth();
-			int maxWidth = tableColumn.getMaxWidth();
-		 
-		    for (int row = 0; row < table.getRowCount(); row++)
-		    {
-		    	TableCellRenderer cellRenderer = table.getCellRenderer(row, column);
-		    	Component c = table.prepareRenderer(cellRenderer, row, column);
-		    	int width = c.getPreferredSize().width + table.getIntercellSpacing().width;
-		    	preferredWidth = Math.max(preferredWidth, width);
-
-		        if (preferredWidth >= maxWidth)
-		        {
-		            preferredWidth = maxWidth;
-		            //break;
-		        }
-		    }
-		    tableColumn.setPreferredWidth( preferredWidth +20);
-		}
+		
 		JScrollPane pane = new JScrollPane(table,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		 
+		resizeColumnWidth(table);
+		updateRowHeights(table);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		
 		return pane;
 	}
 	

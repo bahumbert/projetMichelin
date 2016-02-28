@@ -1,10 +1,24 @@
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import javax.swing.JFrame;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.DOMException;
+import org.w3c.dom.*;
 
-//import java.util.Scanner;
+import java.awt.FileDialog;
+
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,7 +64,7 @@ public class Liste
 						this.liste.add(new Ligne(ligne));
 					}
 					catch (Exception e){
-						System.out.println("Ligne non valide et ignorée");
+						System.out.println("Ligne non valide et ignorï¿½e");
 					}
 				}
 				br.close(); 
@@ -102,13 +116,13 @@ public class Liste
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "Trouvé " + tmp + "\n";
+				affichage += "Trouvï¿½ " + tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
 			}
 			else if (tmp == ""){
-				affichage += "Aucun ticket repéré dans cette ligne\n";
+				affichage += "Aucun ticket repï¿½rï¿½ dans cette ligne\n";
 			}
 		}
 		return affichage;
@@ -245,6 +259,131 @@ public class Liste
 			i++;
 		}
 		return l;
+	}
+	
+	public void export() throws IOException
+	{
+		Ligne ligne;
+		Set<String> lines = new LinkedHashSet();
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+		fd.setDirectory(".");
+		fd.setVisible(true);
+		
+		String path = fd.getDirectory();
+		String filename = fd.getFile();
+		String ext = getExtension(filename);
+		String[] split;
+		
+		if(!ext.equals("txt"))
+		{
+			filename = filename.replaceFirst("[.][^.]+$", "");
+			filename+=".txt";
+		}
+		
+		FileWriter fw = new FileWriter(path+filename,false);
+		BufferedWriter output = new BufferedWriter(fw);
+		
+		for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
+    	{
+			ligne=it.next();
+			if(!ligne.getTickets().equals(""))
+			{
+				split=ligne.getTickets().split("\\(");
+				split=split[0].split(" ");
+				for(String ticket:split)
+					//La redondance est supprimÃ©e
+					lines.add(ticket+"\n");
+			}
+    	}
+		
+		for (String line : lines)
+		    output.write(line);
+		
+		output.flush();
+		output.close();
+	}
+	
+	public void exportXml(String path)
+	{
+		Ligne ligne;
+		try {
+
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+			Document doc = docBuilder.newDocument();
+			Element rootElement = doc.createElement("log");
+			doc.appendChild(rootElement);
+
+			for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) {
+				ligne=it.next();	
+			
+				Element entree = doc.createElement("logentry");
+				rootElement.appendChild(entree);
+	
+				entree.setAttribute("revision", ligne.getNumeroVersion());
+				
+				Element author = doc.createElement("author");
+				author.appendChild(doc.createTextNode(ligne.getIdUtilisateur()));
+				entree.appendChild(author);
+
+				Element date = doc.createElement("date");
+				date.appendChild(doc.createTextNode(ligne.getDate()));
+				entree.appendChild(date);
+	
+				Element msg = doc.createElement("msg");
+				msg.appendChild(doc.createTextNode(ligne.getCommentaire()));
+				entree.appendChild(msg);
+			}
+			
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			DOMSource source = new DOMSource(doc);
+			StreamResult result = new StreamResult(new File(path));
+
+			transformer.transform(source, result);
+
+		  } 
+		catch (ParserConfigurationException pce) {pce.printStackTrace();} 
+		catch (TransformerException tfe) {tfe.printStackTrace();}
+	}
+	
+	public void exportCsv(String path) throws IOException
+	{
+		Ligne ligne;
+		FileWriter fw = new FileWriter(path,false);
+		BufferedWriter output = new BufferedWriter(fw);
+		
+		for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
+    	{
+			ligne=it.next();
+			output.write(ligne.getNumeroVersion()+";"+ligne.getIdUtilisateur()+";"+ligne.getDate()+";"/*+ligne.getLignes()+";"*/+ligne.getCommentaire()+"\n");
+    	}
+		
+		output.flush();
+		output.close();
+	}
+	
+	public void sauver() throws IOException
+	{
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+		fd.setDirectory(".");
+		fd.setVisible(true);
+		
+		String path = fd.getDirectory();
+		String filename = fd.getFile();
+		
+		String ext = getExtension(filename);
+		
+	    if (ext.equals("xml")) 
+	    {
+	    	exportXml(path+filename);
+	    }
+	    else
+	    {
+	    	exportCsv(path+filename);
+		}
+		
 	}
 
 }
