@@ -20,6 +20,7 @@ public class Liste
 		liste=new ArrayList<Ligne>();
 	}
 	
+	@SuppressWarnings("unchecked")
 	public Liste(Liste l){
 		this.liste=(ArrayList<Ligne>) l.liste.clone();
 	}
@@ -49,7 +50,7 @@ public class Liste
 						this.liste.add(new Ligne(ligne));
 					}
 					catch (Exception e){
-						System.out.println("Ligne non valide et ignorï¿½e");
+						System.out.println("Ligne non valide et ignorée");
 					}
 				}
 				br.close(); 
@@ -96,16 +97,18 @@ public class Liste
 		String tmp;
 		for (Ligne t : this.liste){
 			
+			//System.out.println("Appel liste " + t.commentaire);
+			
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "TrouvÃ© " + tmp + "\n";
+				affichage += "Trouvé " + tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
 			}
 			else if (tmp == ""){
-				affichage += "Aucun ticket repÃ©rÃ© dans cette ligne\n";
+				affichage += "Aucun ticket repéré dans cette ligne\n";
 			}
 		}
 		return affichage;

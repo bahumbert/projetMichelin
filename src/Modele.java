@@ -1,9 +1,5 @@
 import javax.swing.table.AbstractTableModel;
 
-
-import org.apache.commons.*;
-
-import java.awt.event.ActionEvent;
 import java.lang.Object;
 
 public class Modele extends AbstractTableModel

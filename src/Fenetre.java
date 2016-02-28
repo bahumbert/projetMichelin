@@ -111,37 +111,66 @@ public class Fenetre extends JFrame
 			 	    if (emplacement != ""){
 				 	    
 				 		String cmd[] = {"cmd.exe", "/C", "svn log --xml > svnlog.xml"};
+				 		String path = "";
 				 		try {
 							Runtime r = Runtime.getRuntime();
 							
 							/*String test = System.getenv("Path");
 							System.out.println(test);
 							System.out.println(test.length());*/
-							final Process p = r.exec(cmd, new String[]{"Path=C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN/bin"},  new File(emplacement));
+							
+							InputStream ips;
+							try {
+								ips = new FileInputStream("./pathTortoise.txt");
+								InputStreamReader ipsr=new InputStreamReader(ips);
+								BufferedReader br=new BufferedReader(ipsr);
+								//System.out.println("Fichier ouvert");
+								
+					 			String ligne = "";
+					 			
+								while ((ligne=br.readLine())!=null){
+									path += ligne;
+								}
+								
+								br.close(); 
+							} 
+							catch (FileNotFoundException e) {
+								System.out.println("Le fichier de configuration n'a pas été trouvé");
+								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
+							} 
+							catch (IOException e) {
+								e.printStackTrace();
+								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
+							} 
+							
+							
+							//System.out.println(path);
+							
+							final Process p = r.exec(cmd, new String[]{"Path="+path},  new File(emplacement));
 							
 							BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 							BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 							
 	
-							System.out.println("Commande :\n");
+							//System.out.println("Commande :\n");
 	
-							int count = 0;
+							//int count = 0;
 							String s;
 							String result = "";
-								while ((s = stdInput.readLine()) != null) {
-									count++;
-									result = result + s + "\n";
-								}
+							while ((s = stdInput.readLine()) != null) {
+								//count++;
+								result = result + s + "\n";
+							}
 							
 							stdInput.close();
 							
-								count = 0;
-								String err = "";
-								while ((s = stdErr.readLine()) != null) {
-									count++;
-									err = err + s + "\n";
-								}
-								
+							//count = 0;
+							String err = "";
+							while ((s = stdErr.readLine()) != null) {
+								//count++;
+								err = err + s + "\n";
+							}
+							
 							stdErr.close();
 							
 							//System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
@@ -245,7 +274,7 @@ public class Fenetre extends JFrame
 			 	case "Enlever tous les filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
@@ -258,7 +287,7 @@ public class Fenetre extends JFrame
 				case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			
@@ -279,13 +308,13 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
-							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
+							System.out.println("Le fichier des tickets n'a pas été trouvé");
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
-			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
+			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
@@ -351,7 +380,7 @@ public class Fenetre extends JFrame
 				case("Trouver les differences"):
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele mo = getModele();
@@ -373,11 +402,11 @@ public class Fenetre extends JFrame
 							}
 							else{
 								compare=mo.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
-								s="diffï¿½rences";
+								s="différences";
 							}
 							
 							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont ete trouvees", "Comparaison", JOptionPane.DEFAULT_OPTION);
+								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont été trouvées", "Comparaison", JOptionPane.DEFAULT_OPTION);
 
 							else
 								ajoutOnglet(compare);

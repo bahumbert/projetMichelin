@@ -126,6 +126,7 @@ public class Ligne {
 			else{}
 					
 		}
+		//System.out.println(this.tickets);
 		return this.tickets;
 	}
 
