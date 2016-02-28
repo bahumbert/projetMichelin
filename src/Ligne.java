@@ -13,7 +13,7 @@ public class Ligne {
 	//String lignes;
 	String commentaire;
 	String tickets;
-	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
 	public Ligne(String ligne) throws Exception{
 		String[] split = ligne.split(";");

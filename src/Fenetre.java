@@ -13,6 +13,7 @@ import org.jdesktop.swingx.JXDatePicker;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FileDialog;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -74,23 +75,21 @@ public class Fenetre extends JFrame
 			 switch(event.getActionCommand())
 			 {
 				case "Importer un fichier":
-			 		JFileChooser fc = new JFileChooser(".");
-					 FileNameExtensionFilter filter = new FileNameExtensionFilter("Fichiers csv et xml.", "csv","xml");
-			         fc.addChoosableFileFilter(filter);
-			         fc.setAcceptAllFileFilterUsed(false);
-			         
-					 if(fc.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-						{
-						 	File fichier;
-							fichier = fc.getSelectedFile();
-							try{
-								ajoutOnglet(fichier);
-							}
-							catch(Exception e){
-								e.printStackTrace();
+					FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+					fd.setDirectory(".");
+					fd.setVisible(true);
 
-							}
+					if(fd.getFile()!=null)
+					{
+						File fichier;
+						fichier = new File(fd.getFile());
+						try{
+							ajoutOnglet(fichier);
 						}
+						catch(Exception e){
+							e.printStackTrace();
+						}
+					}
 				break;
 				
 			 	case "Importer depuis le serveur":

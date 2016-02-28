@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -139,6 +140,8 @@ public class Liste
 			d1 = format.parse(date1);
 		if(date2!="")
 			d2 = format.parse(date2);
+		
+		System.out.println(date1);
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
@@ -149,8 +152,11 @@ public class Liste
 		    	it.remove();
 		    
 		    else if(date1!="" && ligne.getD().compareTo(d1)<=0)
+		    {
+		    	System.out.println(ligne.getD());
 		    	it.remove();
-		    
+		    }
+		     
 		    else if(date2!="" && ligne.getD().compareTo(d2)>=0)
 		    	it.remove();
 		}
@@ -269,38 +275,43 @@ public class Liste
 		fd.setDirectory(".");
 		fd.setVisible(true);
 		
-		String path = fd.getDirectory();
-		String filename = fd.getFile();
-		String ext = getExtension(filename);
-		String[] split;
-		
-		if(!ext.equals("txt"))
+		if(fd.getFile()!=null)
 		{
-			filename = filename.replaceFirst("[.][^.]+$", "");
-			filename+=".txt";
-		}
-		
-		FileWriter fw = new FileWriter(path+filename,false);
-		BufferedWriter output = new BufferedWriter(fw);
-		
-		for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
-    	{
-			ligne=it.next();
-			if(!ligne.getTickets().equals(""))
+			String path = fd.getDirectory();
+			String filename = fd.getFile();
+			String ext = getExtension(filename);
+			String[] split;
+			
+			if(!ext.equals("txt"))
 			{
-				split=ligne.getTickets().split("\\(");
-				split=split[0].split(" ");
-				for(String ticket:split)
-					//La redondance est supprimée
-					lines.add(ticket+"\n");
+				filename = filename.replaceFirst("[.][^.]+$", "");
+				filename+=".txt";
 			}
-    	}
-		
-		for (String line : lines)
-		    output.write(line);
-		
-		output.flush();
-		output.close();
+			
+			FileWriter fw = new FileWriter(path+filename,false);
+			BufferedWriter output = new BufferedWriter(fw);
+			
+			for (Iterator<Ligne> it=this.liste.iterator(); it.hasNext();) 
+	    	{
+				ligne=it.next();
+				if(!ligne.getTickets().equals(""))
+				{
+					split=ligne.getTickets().split("\\(");
+					split=split[0].split(" ");
+					for(String ticket:split)
+						//La redondance est supprimée
+						lines.add(ticket+"\n");
+				}
+	    	}
+			
+			for (String line : lines)
+			    output.write(line);
+			
+			output.flush();
+			output.close();
+			JOptionPane.showConfirmDialog(null, "Les tickets ont bien été sauvegardés", "Export", JOptionPane.DEFAULT_OPTION);
+
+		}
 	}
 	
 	public void exportXml(String path)
@@ -342,7 +353,7 @@ public class Liste
 			StreamResult result = new StreamResult(new File(path));
 
 			transformer.transform(source, result);
-
+			JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 		  } 
 		catch (ParserConfigurationException pce) {pce.printStackTrace();} 
 		catch (TransformerException tfe) {tfe.printStackTrace();}
@@ -362,6 +373,8 @@ public class Liste
 		
 		output.flush();
 		output.close();
+		
+		JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 	}
 	
 	public void sauver() throws IOException
@@ -369,21 +382,26 @@ public class Liste
 		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
 		fd.setDirectory(".");
 		fd.setVisible(true);
-		
-		String path = fd.getDirectory();
-		String filename = fd.getFile();
-		
-		String ext = getExtension(filename);
-		
-	    if (ext.equals("xml")) 
-	    {
-	    	exportXml(path+filename);
-	    }
-	    else
-	    {
-	    	exportCsv(path+filename);
+
+		if(fd.getFile()!=null)
+		{
+			String path = fd.getDirectory();
+			String filename = fd.getFile();
+			
+			String ext = getExtension(filename);
+			
+		    if (ext.equals("xml")) 
+		    {
+		    	exportXml(path+filename);
+		    }
+		    else
+		    {
+		    	filename = filename.replaceFirst("[.][^.]+$", "");
+				filename+=".csv";
+				System.out.println(filename);
+		    	exportCsv(path+filename);
+			}
 		}
-		
 	}
 
 }
