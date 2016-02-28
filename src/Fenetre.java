@@ -6,8 +6,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -75,7 +73,7 @@ public class Fenetre extends JFrame
 			 switch(event.getActionCommand())
 			 {
 				case "Importer un fichier":
-					FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+					FileDialog fd = new FileDialog(new JFrame(), "Choisissez un fichier", FileDialog.LOAD);
 					fd.setDirectory(".");
 					fd.setVisible(true);
 
@@ -134,7 +132,7 @@ public class Fenetre extends JFrame
 								br.close(); 
 							} 
 							catch (FileNotFoundException e) {
-								System.out.println("Le fichier de configuration n'a pas ï¿½tï¿½ trouvï¿½");
+								System.out.println("Le fichier de configuration n'a pas été trouvé");
 								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
 							} 
 							catch (IOException e) {
@@ -188,7 +186,7 @@ public class Fenetre extends JFrame
 							}
 				 		}
 				 		catch(Exception e) {
-							System.out.println("erreur d'execution " + cmd + e.toString());
+							System.out.println("Erreur d'execution " + cmd + e.toString());
 				        }
 					}
 				 	break;
@@ -198,7 +196,7 @@ public class Fenetre extends JFrame
 
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele m = getModele();
@@ -212,7 +210,7 @@ public class Fenetre extends JFrame
 			 	
 			 	case "Exporter les tickets":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele m = getModele();
@@ -224,15 +222,6 @@ public class Fenetre extends JFrame
 			 		}
 			 	break;
 			 		
-			 	case "Imprimer...":
-			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour imprimer", "Imprimer", JOptionPane.DEFAULT_OPTION);
-			 		}
-			 		else{
-			 			
-			 		}
-			 		break;
-			 		
 			 	case "Quitter":
 			 		setVisible(false);
 			 		dispose();
@@ -243,14 +232,14 @@ public class Fenetre extends JFrame
 			 	case "Appliquer des filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½re ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
 			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 			
 			 			String author="", day1="",day2="",number="";
-			 			String message = "Selectionnez les filtres souhaites";
+			 			String message = "Sélectionnez les filtres souhaités";
 
 				 		JLabel auteur = new JLabel("Auteur");
 				 		JTextField champ= new JTextField();
@@ -292,7 +281,7 @@ public class Fenetre extends JFrame
 			 	case "Enlever tous les filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
@@ -305,7 +294,7 @@ public class Fenetre extends JFrame
 				case "Detection de ticket":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour rechercher des tickets", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			
@@ -326,13 +315,13 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
-							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
+							System.out.println("Le fichier des tickets n'a pas été trouvé");
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
-			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
+			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
@@ -398,7 +387,7 @@ public class Fenetre extends JFrame
 				case("Trouver les differences"):
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele mo = getModele();
@@ -420,11 +409,11 @@ public class Fenetre extends JFrame
 							}
 							else{
 								compare=mo.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
-								s="diffï¿½rences";
+								s="différences";
 							}
 							
 							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont ï¿½tï¿½ trouvï¿½es", "Comparaison", JOptionPane.DEFAULT_OPTION);
+								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont été trouvées", "Comparaison", JOptionPane.DEFAULT_OPTION);
 
 							else
 								ajoutOnglet(compare);
@@ -455,10 +444,6 @@ public class Fenetre extends JFrame
 		 JMenuItem exporter = new JMenuItem("Exporter les tickets");
 		 exporter.addActionListener(MenuListener);
 		 nouveau.add(exporter);
-				
-		 JMenuItem imprimer = new JMenuItem("Imprimer...");
-		 imprimer.addActionListener(MenuListener);
-		 nouveau.add(imprimer);
 				
 		 JMenuItem quitter = new JMenuItem("Quitter");
 		 quitter.addActionListener(MenuListener);

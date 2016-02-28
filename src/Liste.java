@@ -58,14 +58,14 @@ public class Liste
 				BufferedReader br=new BufferedReader(ipsr);
 				String ligne;
 				
-				System.out.println("new list");
+				//System.out.println("new list");
 				
 				while ((ligne=br.readLine())!=null){
 					try {
 						this.liste.add(new Ligne(ligne));
 					}
 					catch (Exception e){
-						System.out.println("Ligne non valide et ignorï¿½e");
+						System.out.println("Ligne non valide et ignorée");
 					}
 				}
 				br.close(); 
@@ -123,7 +123,7 @@ public class Liste
 				affichage += "!! Conflit !! => " + tmp + "\n";
 			}
 			else if (tmp == ""){
-				affichage += "Aucun ticket repï¿½rï¿½ dans cette ligne\n";
+				affichage += "Aucun ticket repéré dans cette ligne\n";
 			}
 		}
 		return affichage;
@@ -141,7 +141,7 @@ public class Liste
 		if(date2!="")
 			d2 = format.parse(date2);
 		
-		System.out.println(date1);
+		//System.out.println(date1);
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
@@ -153,7 +153,7 @@ public class Liste
 		    
 		    else if(date1!="" && ligne.getD().compareTo(d1)<=0)
 		    {
-		    	System.out.println(ligne.getD());
+		    	//System.out.println(ligne.getD());
 		    	it.remove();
 		    }
 		     
@@ -270,7 +270,7 @@ public class Liste
 	public void export() throws IOException
 	{
 		Ligne ligne;
-		Set<String> lines = new LinkedHashSet();
+		Set<String> lines = new LinkedHashSet<String>();
 		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
 		fd.setDirectory(".");
 		fd.setVisible(true);
@@ -309,7 +309,7 @@ public class Liste
 			
 			output.flush();
 			output.close();
-			JOptionPane.showConfirmDialog(null, "Les tickets ont bien Ã©tÃ© sauvegardÃ©s", "Export", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(null, "Les tickets ont bien été sauvegardés", "Export", JOptionPane.DEFAULT_OPTION);
 
 		}
 	}
@@ -353,7 +353,7 @@ public class Liste
 			StreamResult result = new StreamResult(new File(path));
 
 			transformer.transform(source, result);
-			JOptionPane.showConfirmDialog(null, "L'environnement a bien Ã©tÃ© sauvegardÃ©", "Export", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 		  } 
 		catch (ParserConfigurationException pce) {pce.printStackTrace();} 
 		catch (TransformerException tfe) {tfe.printStackTrace();}
@@ -374,7 +374,7 @@ public class Liste
 		output.flush();
 		output.close();
 		
-		JOptionPane.showConfirmDialog(null, "L'environnement a bien Ã©tÃ© sauvegardÃ©", "Export", JOptionPane.DEFAULT_OPTION);
+		JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 	}
 	
 	public void sauver() throws IOException
@@ -398,7 +398,7 @@ public class Liste
 		    {
 		    	filename = filename.replaceFirst("[.][^.]+$", "");
 				filename+=".csv";
-				System.out.println(filename);
+				//System.out.println(filename);
 		    	exportCsv(path+filename);
 			}
 		}
