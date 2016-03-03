@@ -134,6 +134,15 @@ public class Fenetre extends JFrame
 							catch (FileNotFoundException e) {
 								System.out.println("Le fichier de configuration n'a pas été trouvé");
 								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
+								File fichier = new File("./pathTortoise.txt");
+						 		try {
+									FileWriter fw = new FileWriter(fichier);
+									fw.write(path);
+									fw.close();
+								} catch (IOException e2) {
+									// TODO Auto-generated catch block
+									e2.printStackTrace();
+								}
 							} 
 							catch (IOException e) {
 								e.printStackTrace();
