@@ -145,8 +145,9 @@ public class Liste
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (auteur!="" && (!(ligne.getIdUtilisateur().contains(auteur))))
-		        it.remove();
+		    if (auteur!="")
+		    	if(!(ligne.getIdUtilisateur().contains(auteur) || ligne.getCommentaire().contains(auteur)))
+		    			it.remove();
 		    
 		    else if (version!="" && !ligne.getNumeroVersion().contains(version))
 		    	it.remove();
@@ -300,7 +301,7 @@ public class Liste
 					split=split[0].split(" ");
 					for(String ticket:split)
 						//La redondance est supprimée
-						lines.add(ticket+"\n");
+						lines.add(ticket+"\r\n");
 				}
 	    	}
 			

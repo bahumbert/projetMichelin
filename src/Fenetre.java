@@ -6,6 +6,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.jdesktop.swingx.JXDatePicker;
 
@@ -540,6 +542,8 @@ public class Fenetre extends JFrame
 	        
 		Modele modele=new Modele(liste);
 		table = new JTable(modele);
+		RowSorter<TableModel> sorter = new TableRowSorter<TableModel>(modele);
+		table.setRowSorter(sorter);
 		table.getTableHeader().setDefaultRenderer(renderer);
 		
 		JScrollPane pane = new JScrollPane(table,
