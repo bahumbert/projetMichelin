@@ -71,10 +71,9 @@ public class Fenetre extends JFrame
 	 
 	 ActionListener MenuListener = new ActionListener() {
 		 public void actionPerformed(ActionEvent event) {
-			 
 			 switch(event.getActionCommand())
 			 {
-				case "Importer un fichier":
+				case "Importer un fichier...":
 					FileDialog fd = new FileDialog(new JFrame(), "Choisissez un fichier", FileDialog.LOAD);
 					fd.setDirectory(".");
 					fd.setVisible(true);
@@ -92,7 +91,7 @@ public class Fenetre extends JFrame
 					}
 				break;
 				
-			 	case "Importer depuis le serveur":
+			 	case "Importer depuis le serveur...":
 			 					 		
 			 		JFileChooser fac = new JFileChooser(".");
 			 		fac.setCurrentDirectory(new java.io.File("."));
@@ -108,98 +107,154 @@ public class Fenetre extends JFrame
 			 	    }
 
 			 	    if (emplacement != ""){
-				 	    
-				 		String cmd[] = {"cmd.exe", "/C", "svn log --xml > svnlog.xml"};
-				 		String path = "";
-				 		try {
-							Runtime r = Runtime.getRuntime();
-							
-							/*String test = System.getenv("Path");
-							System.out.println(test);
-							System.out.println(test.length());*/
-							
-							InputStream ips;
-							try {
-								ips = new FileInputStream("./pathTortoise.txt");
-								InputStreamReader ipsr=new InputStreamReader(ips);
-								BufferedReader br=new BufferedReader(ipsr);
-								//System.out.println("Fichier ouvert");
-								
-					 			String ligne = "";
+			 	    	
+			 	    	
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			 			
+			 			String message = "Sélectionnez les filtres souhaités";
+
+				 		JLabel max = new JLabel("Nombre maximum");
+				 		JTextField champMax= new JTextField("500");
+				 		JLabel revision = new JLabel("Numero de révision de/à");
+				 		JTextField champRevision1= new JTextField();
+				 		JTextField champRevision2= new JTextField();
+				 		JLabel dates = new JLabel("Dates");
+				 		JXDatePicker date1 = new JXDatePicker();
+				 		JXDatePicker date2 = new JXDatePicker();
+				 			date1.setFormats(format);
+				 			date2.setDate(Calendar.getInstance().getTime());
+				 			date2.setFormats(format);
+				 		
+				 		
+				 		Object [] params ={message,max,champMax,revision,champRevision1,champRevision2,dates,date1,date2};
+				 		int res = JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
+				 		
+				 		if (res == 0){				 	
+				 			String valMax="", valDay1="",valDay2="", valRevision1="", valRevision2="", parametres = "";
+				 			
+				 			
+					 		if(champMax.getText()!=null){
+					 			valMax=champMax.getText();
+					 			parametres += " -l " + valMax;
+					 		}
+					 		
+					 		if(champRevision1.getText()!=null){
+					 			valRevision1=champRevision1.getText();
+					 			if(champRevision2.getText()!=null){
+						 			valRevision2=champRevision2.getText();
+						 			parametres += " -r " + valRevision1 + ":" + valRevision2;
+						 		}
+					 			else{
+					 				parametres += " -r " + valRevision1;
+					 			}
 					 			
-								while ((ligne=br.readLine())!=null){
-									path += ligne;
+					 		}
+					 		else {
+	
+						 		if(date1.getDate()!=null){
+						 			valDay1=format.format(date1.getDate());
+						 			valDay2=format.format(date2.getDate());
+						 			parametres += " -r {" + valDay1 + "}:{" + valDay2+"}";
+						 		}
+						 		else {
+						 			valDay2=format.format(date2.getDate());
+						 			parametres += " -r {" + valDay2+"}";
+						 		}
+					 		}
+
+				 			String cmd[] = {"cmd.exe", "/C", "svn log " + parametres + " --xml > svnlog.xml"};
+				 			//System.out.println(parametres);
+					 		String path = "";
+					 		try {
+								Runtime r = Runtime.getRuntime();
+								
+								/*String test = System.getenv("Path");
+								System.out.println(test);
+								System.out.println(test.length());*/
+								
+								InputStream ips;
+								try {
+									ips = new FileInputStream("./pathTortoise.txt");
+									InputStreamReader ipsr=new InputStreamReader(ips);
+									BufferedReader br=new BufferedReader(ipsr);
+									//System.out.println("Fichier ouvert");
+									
+						 			String ligne = "";
+						 			
+									while ((ligne=br.readLine())!=null){
+										path += ligne;
+									}
+									
+									br.close(); 
+								} 
+								catch (FileNotFoundException e) {
+									System.out.println("Le fichier de configuration n'a pas été trouvé");
+									path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin";
+									File fichier = new File("./pathTortoise.txt");
+							 		try {
+										FileWriter fw = new FileWriter(fichier);
+										fw.write(path);
+										fw.close();
+									} catch (IOException e2) {
+										// TODO Auto-generated catch block
+										e2.printStackTrace();
+									}
+								} 
+								catch (IOException e) {
+									e.printStackTrace();
+									path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin";
+								} 
+								
+								
+								//System.out.println(path);
+								
+								final Process p = r.exec(cmd, new String[]{"Path="+path},  new File(emplacement));
+								
+								BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+								BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+								
+		
+								//System.out.println("Commande :\n");
+		
+								//int count = 0;
+								String s;
+								String result = "";
+								while ((s = stdInput.readLine()) != null) {
+									//count++;
+									result = result + s + "\n";
 								}
 								
-								br.close(); 
-							} 
-							catch (FileNotFoundException e) {
-								System.out.println("Le fichier de configuration n'a pas été trouvé");
-								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
-								File fichier = new File("./pathTortoise.txt");
-						 		try {
-									FileWriter fw = new FileWriter(fichier);
-									fw.write(path);
-									fw.close();
-								} catch (IOException e2) {
-									// TODO Auto-generated catch block
-									e2.printStackTrace();
+								stdInput.close();
+								
+								//count = 0;
+								String err = "";
+								while ((s = stdErr.readLine()) != null) {
+									//count++;
+									err = err + s + "\n";
 								}
-							} 
-							catch (IOException e) {
-								e.printStackTrace();
-								path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin;E:\\Applications\\TortoiseSVN\\bin";
-							} 
-							
-							
-							//System.out.println(path);
-							
-							final Process p = r.exec(cmd, new String[]{"Path="+path},  new File(emplacement));
-							
-							BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-							BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-							
-	
-							//System.out.println("Commande :\n");
-	
-							//int count = 0;
-							String s;
-							String result = "";
-							while ((s = stdInput.readLine()) != null) {
-								//count++;
-								result = result + s + "\n";
-							}
-							
-							stdInput.close();
-							
-							//count = 0;
-							String err = "";
-							while ((s = stdErr.readLine()) != null) {
-								//count++;
-								err = err + s + "\n";
-							}
-							
-							stdErr.close();
-							
-							//System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
-							
-							if (err.equals("")){
-								File fichier = new File(emplacement+"\\svnlog.xml");
-								try{
-									ajoutOnglet(fichier);
+								
+								stdErr.close();
+								
+								//System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
+								
+								if (err.equals("")){
+									File fichier = new File(emplacement+"\\svnlog.xml");
+									try{
+										ajoutOnglet(fichier);
+									}
+									catch(Exception e){
+										System.out.println("Erreur "+e.toString());
+									}
 								}
-								catch(Exception e){
-									System.out.println("Erreur "+e.toString());
+								else {
+									JOptionPane.showMessageDialog(onglets, "Erreur : "+err);
 								}
-							}
-							else {
-								JOptionPane.showMessageDialog(onglets, "Erreur : "+err);
-							}
-				 		}
-				 		catch(Exception e) {
-							System.out.println("Erreur d'execution " + cmd + e.toString());
-				        }
-					}
+					 		}
+					 		catch(Exception e) {
+								System.out.println("Erreur d'execution " + cmd + e.toString());
+					        }
+						}
+			 	    }
 				 	break;
 
 
@@ -210,23 +265,23 @@ public class Fenetre extends JFrame
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
-			 			Modele m = getModele();
 						try {
-							m.getListe().sauver();
+							Modele model = getModele();
+							model.getListe().sauver();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
 			 		}
 			 	break;
 			 	
-			 	case "Exporter les tickets":
+			 	case "Exporter les tickets...":
 			 		if(onglets.getTabCount()==0){
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
-			 			Modele m = getModele();
 						try {
-							m.getListe().export();
+							Modele model = getModele();
+							model.getListe().export();
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -264,27 +319,29 @@ public class Fenetre extends JFrame
 				 		JTextField champ2= new JTextField();
 				 		
 				 		Object [] params ={message,auteur,champ,dates,date1,date2,ticket,champ2};
-				 		JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
+				 		int res = JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 				 		
-				 		if(champ.getText()!=null)
-				 			author=champ.getText();
-
-				 		if(date1.getDate()!=null)
-				 			day1=format.format(date1.getDate());
-				 		
-				 		day2=format.format(date2.getDate());
-				 		
-				 		if(champ2.getText()!=null)
-				 			number=champ2.getText();
-				 		
-				 		Modele m = getModele();
-				 		try {
-							Liste l=m.getListe().filtres(author, day1, day2, number);
-							m.setListe(l);
-							m.fireTableDataChanged();
-						} catch (ParseException e) {
-							e.printStackTrace();
-						}
+				 		if( res == 0){
+					 		if(champ.getText()!=null)
+					 			author=champ.getText();
+	
+					 		if(date1.getDate()!=null)
+					 			day1=format.format(date1.getDate());
+					 		
+					 		day2=format.format(date2.getDate());
+					 		
+					 		if(champ2.getText()!=null)
+					 			number=champ2.getText();
+					 		
+					 		try {
+								Modele model = getModele();
+								Liste l=model.getListe().filtres(author, day1, day2, number);
+								model.setListe(l);
+								model.fireTableDataChanged();
+							} catch (ParseException e) {
+								e.printStackTrace();
+							}
+				 		}
 				 	
 			 		}
 			 	break;
@@ -296,19 +353,23 @@ public class Fenetre extends JFrame
 			 		}
 			 		else
 			 		{
-			 			Modele m=getModele();
-			 			m.retour();
-				 		m.fireTableDataChanged();
+						Modele model = getModele();
+			 			model.retour();
+			 			model.fireTableDataChanged();
+			 			for (int row = 0; row < model.getRowCount(); row++){
+				 			model.setValueAt(" ", row, 4);
+				 		}
+			 			model.fireTableDataChanged();
 			 		}
 			 	break;
 			 	
-				case "Detection de ticket":
+				case "Detecter des tickets":
 			 		if(onglets.getTabCount()==0)
 			 		{
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour rechercher des tickets", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
-			 			
+			 			Modele model = getModele();
 			 			InputStream ips;
 			 			String tickets = "";
 						try {
@@ -337,17 +398,9 @@ public class Fenetre extends JFrame
 				 				 		
 				 		Object [] parameters ={msg,pattern};
 				 		int res = JOptionPane.showConfirmDialog(null, parameters, "Filtres", JOptionPane.OK_CANCEL_OPTION);
-
-
-
-
-
-
-				 		
-			 			Modele model = getModele();
 			 			
 				 		if (res == 0 && !pattern.getText().equals("")){
-					 		
+												 		
 					 		for (int row = 0; row < model.getRowCount(); row++){
 					 			model.setValueAt("", row, 4);
 					 		}
@@ -394,6 +447,21 @@ public class Fenetre extends JFrame
 			 		
 			 	break;
 			 	
+				case("Annuler la detection"):
+			 		if(onglets.getTabCount()==0)
+			 		{
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 		}
+			 		else {
+						Modele model = getModele();
+						for (int row = 0; row < model.getRowCount(); row++){
+				 			model.setValueAt(" ", row, 4);
+				 		}
+						model.fireTableDataChanged();
+			 		}
+				
+			 	break;
+
 			 	case("Trouver les similitudes"):
 				case("Trouver les differences"):
 			 		if(onglets.getTabCount()==0)
@@ -401,7 +469,7 @@ public class Fenetre extends JFrame
 			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
-			 			Modele mo = getModele();
+			 			Modele model = getModele();
 			 			JFileChooser filec = new JFileChooser(".");
 						FileNameExtensionFilter filtre = new FileNameExtensionFilter("Fichiers csv.", "csv");
 				        filec.addChoosableFileFilter(filtre);
@@ -415,11 +483,11 @@ public class Fenetre extends JFrame
 
 							Liste compare;
 							if(event.getActionCommand()=="Trouver les similitudes"){
-								compare=mo.getListe().comparerIdentique(new Liste(fichier.getAbsolutePath()));
+								compare=model.getListe().comparerIdentique(new Liste(fichier.getAbsolutePath()));
 								s="similitudes";
 							}
 							else{
-								compare=mo.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
+								compare=model.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
 								s="différences";
 							}
 							
@@ -440,11 +508,11 @@ public class Fenetre extends JFrame
 		 JMenuBar menuBar = new JMenuBar();
 	 
 		 JMenu nouveau = new JMenu("Nouveau");
-		 JMenuItem ouvrir = new JMenuItem("Importer un fichier");
+		 JMenuItem ouvrir = new JMenuItem("Importer un fichier...");
 		 nouveau.add(ouvrir);
 		 ouvrir.addActionListener(MenuListener);
 		 	
-		JMenuItem log = new JMenuItem("Importer depuis le serveur");
+		JMenuItem log = new JMenuItem("Importer depuis le serveur...");
 		 nouveau.add(log);
 		 log.addActionListener(MenuListener);
 	 
@@ -452,7 +520,7 @@ public class Fenetre extends JFrame
 		 sauvegarder.addActionListener(MenuListener);
 		 nouveau.add(sauvegarder);
 		 
-		 JMenuItem exporter = new JMenuItem("Exporter les tickets");
+		 JMenuItem exporter = new JMenuItem("Exporter les tickets...");
 		 exporter.addActionListener(MenuListener);
 		 nouveau.add(exporter);
 				
@@ -461,16 +529,22 @@ public class Fenetre extends JFrame
 		 nouveau.add(quitter);
 	 
 		 JMenu outils = new JMenu("Outils");
-		 	JMenuItem ticket = new JMenuItem("Detection de ticket");
-			ticket.addActionListener(MenuListener);
+		 JMenu tickets = new JMenu("Tickets");
+		 	JMenuItem addTicket = new JMenuItem("Detecter des tickets");
+		 	addTicket.addActionListener(MenuListener);
+			JMenuItem delTicket = new JMenuItem("Annuler la detection");
+			delTicket.addActionListener(MenuListener);
+			tickets.add(addTicket);
+			tickets.add(delTicket);
 			
 		 	JMenu filtres = new JMenu("Filtres");
-		 	JMenuItem enlever = new JMenuItem("Enlever tous les filtres");
-		 	enlever.addActionListener(MenuListener);
 		 	JMenuItem appliquer = new JMenuItem("Appliquer des filtres");
 			appliquer.addActionListener(MenuListener);
+			JMenuItem enlever = new JMenuItem("Enlever tous les filtres");
+		 	enlever.addActionListener(MenuListener);
+		 	filtres.add(appliquer);
 			filtres.add(enlever);
-			filtres.add(appliquer);
+			
 
 			JMenu comparer = new JMenu("Comparer");
 			JMenuItem egal = new JMenuItem("Trouver les similitudes");
@@ -480,7 +554,7 @@ public class Fenetre extends JFrame
 			comparer.add(egal);
 			comparer.add(different);
 			
-			outils.add(ticket);
+			outils.add(tickets);
 			outils.add(filtres);
 			outils.add(comparer);
 					

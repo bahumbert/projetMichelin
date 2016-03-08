@@ -380,7 +380,7 @@ public class Liste
 	
 	public void sauver() throws IOException
 	{
-		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
 		fd.setDirectory(".");
 		fd.setVisible(true);
 
