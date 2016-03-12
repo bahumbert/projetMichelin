@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -25,6 +26,7 @@ import java.io.FileWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Enumeration;
 
 public class Fenetre extends JFrame
 {
@@ -111,11 +113,11 @@ public class Fenetre extends JFrame
 			 	    	
 						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 			
-			 			String message = "Sélectionnez les filtres souhaités";
+			 			String message = "Sï¿½lectionnez les filtres souhaitï¿½s";
 
 				 		JLabel max = new JLabel("Nombre maximum");
 				 		JTextField champMax= new JTextField("500");
-				 		JLabel revision = new JLabel("Numero de révision de/à");
+				 		JLabel revision = new JLabel("Numero de rï¿½vision de/ï¿½");
 				 		JTextField champRevision1= new JTextField();
 				 		JTextField champRevision2= new JTextField();
 				 		JLabel dates = new JLabel("Dates");
@@ -188,7 +190,7 @@ public class Fenetre extends JFrame
 									br.close(); 
 								} 
 								catch (FileNotFoundException e) {
-									System.out.println("Le fichier de configuration n'a pas été trouvé");
+									System.out.println("Le fichier de configuration n'a pas ï¿½tï¿½ trouvï¿½");
 									path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin";
 									File fichier = new File("./pathTortoise.txt");
 							 		try {
@@ -262,7 +264,7 @@ public class Fenetre extends JFrame
 
 			 	case "Sauvegarder...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 						try {
@@ -276,7 +278,7 @@ public class Fenetre extends JFrame
 			 	
 			 	case "Exporter les tickets...":
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 						try {
@@ -298,50 +300,55 @@ public class Fenetre extends JFrame
 			 	case "Appliquer des filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
 			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 			
-			 			String author="", day1="",day2="",number="";
-			 			String message = "Sélectionnez les filtres souhaités";
+			 			String author="", day1="",day2="",number1="",number2="";
+			 			String message = "SÃ©lectionnez les filtres souhaitÃ©s";
 
 				 		JLabel auteur = new JLabel("Auteur");
-				 		JTextField champ= new JTextField();
+				 		JTextField champ1= new JTextField();
 				 		JLabel dates = new JLabel("Dates");;
 				 		JXDatePicker date1 = new JXDatePicker();
 				 		JXDatePicker date2 = new JXDatePicker();
 				 			date1.setFormats(format);
 				 			date2.setDate(Calendar.getInstance().getTime());
 				 			date2.setFormats(format);
-				 		JLabel ticket = new JLabel("Numero de commit");
-				 		JTextField champ2= new JTextField();
+				 		JLabel ticket = new JLabel("Numero de rÃ©vision");
+				 		JLabel borneInf = new JLabel("Borne infÃ©rieure :");
+				 		JTextField champ2 = new JTextField();
+				 		JLabel borneSup = new JLabel("Borne SupÃ©rieure :");
+				 		JTextField champ3= new JTextField();
 				 		
-				 		Object [] params ={message,auteur,champ,dates,date1,date2,ticket,champ2};
-				 		int res = JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
+				 		Object [] params ={message,auteur,champ1,dates,date1,date2,ticket,borneInf,champ2,borneSup,champ3};
+				 		JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 				 		
-				 		if( res == 0){
-					 		if(champ.getText()!=null)
-					 			author=champ.getText();
-	
-					 		if(date1.getDate()!=null)
-					 			day1=format.format(date1.getDate());
-					 		
-					 		day2=format.format(date2.getDate());
-					 		
-					 		if(champ2.getText()!=null)
-					 			number=champ2.getText();
-					 		
-					 		try {
-								Modele model = getModele();
-								Liste l=model.getListe().filtres(author, day1, day2, number);
-								model.setListe(l);
-								model.fireTableDataChanged();
-							} catch (ParseException e) {
-								e.printStackTrace();
-							}
-				 		}
+				 		if(champ1.getText()!=null)
+				 			author=champ1.getText();
+
+				 		if(date1.getDate()!=null)
+				 			day1=format.format(date1.getDate());
+				 		
+				 		day2=format.format(date2.getDate());
+				 		
+				 		if(champ2.getText()!=null)
+				 			number1=champ2.getText();
+				 		
+				 		if(champ3.getText()!=null)
+				 			number2=champ3.getText();
+				 		
+				 		Modele m = getModele();
+				 		try {
+							Liste l=m.getListe().filtres(author, day1, day2, number1,number2);
+							m.setListe(l);
+							m.fireTableDataChanged();
+						} 
+				 		catch (ParseException e) {
+							e.printStackTrace();
+						}
 				 	
 			 		}
 			 	break;
@@ -349,7 +356,7 @@ public class Fenetre extends JFrame
 			 	case "Enlever tous les filtres":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
@@ -366,7 +373,7 @@ public class Fenetre extends JFrame
 				case "Detecter des tickets":
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour rechercher des tickets", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour rechercher des tickets", "Tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			Modele model = getModele();
@@ -387,13 +394,13 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
-							System.out.println("Le fichier des tickets n'a pas été trouvé");
+							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
-			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
+			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
@@ -450,7 +457,7 @@ public class Fenetre extends JFrame
 				case("Annuler la detection"):
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit Ãªtre ouvert pour annuler la dÃ©tection", "DÃ©tection", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 						Modele model = getModele();
@@ -464,39 +471,62 @@ public class Fenetre extends JFrame
 
 			 	case("Trouver les similitudes"):
 				case("Trouver les differences"):
-			 		if(onglets.getTabCount()==0)
+			 		if(onglets.getTabCount()<2)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins deux fichiers doivent Ãªtre ouverts pour la comparaison", "Comparaison", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
-			 			Modele model = getModele();
-			 			JFileChooser filec = new JFileChooser(".");
-						FileNameExtensionFilter filtre = new FileNameExtensionFilter("Fichiers csv.", "csv");
-				        filec.addChoosableFileFilter(filtre);
-				        filec.setAcceptAllFileFilterUsed(false);
-				         
-						if(filec.showOpenDialog(null) == JFileChooser.APPROVE_OPTION)
-						{
-						 	File fichier;
-						 	String s;
-							fichier = filec.getSelectedFile();
+			 			Modele mo = getModele();
+			 			Modele m2 = null;
+			 			Boolean ok = false;
+					 	String s;
+					 	JPanel control = new JPanel();
+					 	control.setLayout(new GridLayout(6,1));
+					 	ButtonGroup group = new ButtonGroup();
 
-							Liste compare;
+					 	for(int i=0;i<onglets.getTabCount();i++)
+					 	{
+					 		JRadioButton radioButton = new JRadioButton(onglets.getTitleAt(i));
+					 		group.add(radioButton);
+					 		control.add(radioButton);
+					 	}
+					 	int res= JOptionPane.showConfirmDialog(null, control, "Comparaison", JOptionPane.OK_CANCEL_OPTION);
+					 	
+					 	if(res==0)
+					 	{
+					 		if(group.getSelection()!=null)
+					 		{
+					 			int i=0;
+					 			for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements();) {
+					 	            AbstractButton button = buttons.nextElement();
+
+					 	            if (button.isSelected()) {
+					 	            	JTable jt =(JTable)((JScrollPane)onglets.getComponentAt(i)).getViewport().getView();
+					 	            	m2=(Modele)jt.getModel();
+					 	            	ok=true;
+					 	            }
+					 	            i++;
+					 	        }
+					 		}
+					 	}
+					 	if(ok)
+					 	{
+					 		Liste compare;
 							if(event.getActionCommand()=="Trouver les similitudes"){
-								compare=model.getListe().comparerIdentique(new Liste(fichier.getAbsolutePath()));
+								compare=mo.getListe().comparerIdentique(m2.getListe());
 								s="similitudes";
 							}
 							else{
-								compare=model.getListe().comparerDifferent(new Liste(fichier.getAbsolutePath()));
-								s="différences";
+								compare=mo.getListe().comparerDifferent(m2.getListe());
+								s="diffÃ©rences";
 							}
 							
 							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont été trouvées", "Comparaison", JOptionPane.DEFAULT_OPTION);
+								JOptionPane.showConfirmDialog(null, "Aucunes "+s+" n'ont Ã©tÃ© trouvÃ©es", "Comparaison", JOptionPane.DEFAULT_OPTION);
 
 							else
 								ajoutOnglet(compare);
-						}
+					 	}
 			 		}
 				break;
 			 }

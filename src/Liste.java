@@ -65,7 +65,7 @@ public class Liste
 						this.liste.add(new Ligne(ligne));
 					}
 					catch (Exception e){
-						System.out.println("Ligne non valide et ignorée");
+						System.out.println("Ligne non valide et ignorï¿½e");
 					}
 				}
 				br.close(); 
@@ -123,42 +123,47 @@ public class Liste
 				affichage += "!! Conflit !! => " + tmp + "\n";
 			}
 			else if (tmp == ""){
-				affichage += "Aucun ticket repéré dans cette ligne\n";
+				affichage += "Aucun ticket repï¿½rï¿½ dans cette ligne\n";
 			}
 		}
 		return affichage;
 	}
 		
-	public Liste filtres (String auteur, String date1, String date2,String version) throws ParseException
+	public Liste filtres (String auteur, String date1, String date2,String revision1, String revision2) throws ParseException
 	{
 		Liste filtre = new Liste(this);
 		Date d1 = new Date();
 		Date d2 = new Date();
+		int r1=0;
+		int r2=0;
 		Ligne ligne;
 		
 		if(date1!="")
 			d1 = format.parse(date1);
 		if(date2!="")
 			d2 = format.parse(date2);
+		if(!revision1.equals(""))
+			r1=parseTicket(revision1);
+		if(!revision2.equals(""))
+			r2=parseTicket(revision2);
 		
-		//System.out.println(date1);
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (auteur!="")
+		    if (!auteur.equals(""))
 		    	if(!(ligne.getIdUtilisateur().contains(auteur) || ligne.getCommentaire().contains(auteur)))
 		    			it.remove();
 		    
-		    else if (version!="" && !ligne.getNumeroVersion().contains(version))
+		    else if (!revision1.equals("") && parseTicket(ligne.getNumeroVersion())< r1)
 		    	it.remove();
 		    
-		    else if(date1!="" && ligne.getD().compareTo(d1)<=0)
-		    {
-		    	//System.out.println(ligne.getD());
+		    else if (!revision2.equals("") && parseTicket(ligne.getNumeroVersion())> r2)
 		    	it.remove();
-		    }
+		    
+		    else if(!date1.equals("") && ligne.getD().compareTo(d1)<=0)
+		    	it.remove();
 		     
-		    else if(date2!="" && ligne.getD().compareTo(d2)>=0)
+		    else if(!date2.equals("") && ligne.getD().compareTo(d2)>=0)
 		    	it.remove();
 		}
 		return filtre;
@@ -310,7 +315,7 @@ public class Liste
 			
 			output.flush();
 			output.close();
-			JOptionPane.showConfirmDialog(null, "Les tickets ont bien été sauvegardés", "Export", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(null, "Les tickets ont bien ï¿½tï¿½ sauvegardï¿½s", "Export", JOptionPane.DEFAULT_OPTION);
 
 		}
 	}
@@ -354,7 +359,7 @@ public class Liste
 			StreamResult result = new StreamResult(new File(path));
 
 			transformer.transform(source, result);
-			JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(null, "L'environnement a bien ï¿½tï¿½ sauvegardï¿½", "Export", JOptionPane.DEFAULT_OPTION);
 		  } 
 		catch (ParserConfigurationException pce) {pce.printStackTrace();} 
 		catch (TransformerException tfe) {tfe.printStackTrace();}
@@ -375,7 +380,7 @@ public class Liste
 		output.flush();
 		output.close();
 		
-		JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
+		JOptionPane.showConfirmDialog(null, "L'environnement a bien ï¿½tï¿½ sauvegardï¿½", "Export", JOptionPane.DEFAULT_OPTION);
 	}
 	
 	public void sauver() throws IOException
