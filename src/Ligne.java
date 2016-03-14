@@ -27,7 +27,7 @@ public class Ligne {
 			this.commentaire = split[3];
 			this.tickets = "";
 		}
-		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
+		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorï¿½e");
 	}
 	
 	public String detectionTickets(String tickets){
@@ -91,7 +91,7 @@ public class Ligne {
 			int max = 0;
 			String ticketRepete = "";
 			
-			this.tickets = listTickets.substring(0,listTickets.length()-2); // Suppression de la dernière virgule
+			this.tickets = listTickets.substring(0,listTickets.length()-2); // Suppression de la derniï¿½re virgule
 			
 			String[] listeTickets = this.tickets.split(",");
 			for(String t : listeTickets){

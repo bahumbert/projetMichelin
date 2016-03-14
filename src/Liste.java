@@ -129,12 +129,12 @@ public class Liste
 		return affichage;
 	}
 		
-	public Liste filtres (String auteur, String date1, String date2,String revision1, String revision2) throws ParseException
+	public Liste filtres (String auteur, String date1, String date2,String revision1,String revision2) throws ParseException
 	{
 		Liste filtre = new Liste(this);
 		Date d1 = new Date();
 		Date d2 = new Date();
-		int r1=0;
+		int r1 = 0;
 		int r2=0;
 		Ligne ligne;
 		
@@ -147,12 +147,12 @@ public class Liste
 		if(!revision2.equals(""))
 			r2=parseTicket(revision2);
 		
+		System.out.println(r1);
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (!auteur.equals(""))
-		    	if(!(ligne.getIdUtilisateur().contains(auteur) || ligne.getCommentaire().contains(auteur)))
-		    			it.remove();
+		    if (auteur!="" && (!(ligne.getIdUtilisateur().contains(auteur))))
+		        it.remove();
 		    
 		    else if (!revision1.equals("") && parseTicket(ligne.getNumeroVersion())< r1)
 		    	it.remove();
@@ -160,10 +160,13 @@ public class Liste
 		    else if (!revision2.equals("") && parseTicket(ligne.getNumeroVersion())> r2)
 		    	it.remove();
 		    
-		    else if(!date1.equals("") && ligne.getD().compareTo(d1)<=0)
+		    else if(date1!="" && ligne.getD().compareTo(d1)<=0)
+		    {
+		    	System.out.println(ligne.getD());
 		    	it.remove();
+		    }
 		     
-		    else if(!date2.equals("") && ligne.getD().compareTo(d2)>=0)
+		    else if(date2!="" && ligne.getD().compareTo(d2)>=0)
 		    	it.remove();
 		}
 		return filtre;
