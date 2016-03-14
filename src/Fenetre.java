@@ -117,9 +117,11 @@ public class Fenetre extends JFrame
 
 				 		JLabel max = new JLabel("Nombre maximum");
 				 		JTextField champMax= new JTextField("500");
-				 		JLabel revision = new JLabel("Numero de r�vision de/�");
+				 		JLabel revision = new JLabel("Numero de r�vision");
+				 		JLabel borneInf = new JLabel("Borne inférieure :");
 				 		JTextField champRevision1= new JTextField();
-				 		JTextField champRevision2= new JTextField();
+				 		JLabel borneSup = new JLabel("Borne Supérieure :");
+				 		JTextField champRevision2= new JTextField("HEAD");
 				 		JLabel dates = new JLabel("Dates");
 				 		JXDatePicker date1 = new JXDatePicker();
 				 		JXDatePicker date2 = new JXDatePicker();
@@ -128,7 +130,7 @@ public class Fenetre extends JFrame
 				 			date2.setFormats(format);
 				 		
 				 		
-				 		Object [] params ={message,max,champMax,revision,champRevision1,champRevision2,dates,date1,date2};
+				 		Object [] params ={message,max,champMax,revision,borneInf,champRevision1,borneSup,champRevision2,dates,date1,date2};
 				 		int res = JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 				 		
 				 		if (res == 0){				 	
@@ -140,9 +142,9 @@ public class Fenetre extends JFrame
 					 			parametres += " -l " + valMax;
 					 		}
 					 		
-					 		if(champRevision1.getText()!=null){
+					 		if(!champRevision1.getText().equals("")){
 					 			valRevision1=champRevision1.getText();
-					 			if(champRevision2.getText()!=null){
+					 			if(!champRevision2.getText().equals("")){
 						 			valRevision2=champRevision2.getText();
 						 			parametres += " -r " + valRevision1 + ":" + valRevision2;
 						 		}
@@ -150,6 +152,10 @@ public class Fenetre extends JFrame
 					 				parametres += " -r " + valRevision1;
 					 			}
 					 			
+					 		}
+					 		else if (!champRevision2.getText().equals("")){
+					 			valRevision2=champRevision2.getText();
+					 			parametres += " -r 1:" + valRevision2;
 					 		}
 					 		else {
 	
@@ -165,7 +171,7 @@ public class Fenetre extends JFrame
 					 		}
 
 				 			String cmd[] = {"cmd.exe", "/C", "svn log " + parametres + " --xml > svnlog.xml"};
-				 			//System.out.println(parametres);
+				 			System.out.println(parametres);
 					 		String path = "";
 					 		try {
 								Runtime r = Runtime.getRuntime();
@@ -326,18 +332,18 @@ public class Fenetre extends JFrame
 				 		Object [] params ={message,auteur,champ1,dates,date1,date2,ticket,borneInf,champ2,borneSup,champ3};
 				 		JOptionPane.showConfirmDialog(null, params, "Filtres", JOptionPane.OK_CANCEL_OPTION);
 				 		
-				 		if(champ1.getText()!=null)
+				 		if(!champ1.getText().equals(""))
 				 			author=champ1.getText();
 
-				 		if(date1.getDate()!=null)
+				 		if(date1.getDate() != null && !date1.getDate().equals(""))
 				 			day1=format.format(date1.getDate());
 				 		
 				 		day2=format.format(date2.getDate());
 				 		
-				 		if(champ2.getText()!=null)
+				 		if(!champ2.getText().equals(""))
 				 			number1=champ2.getText();
 				 		
-				 		if(champ3.getText()!=null)
+				 		if(!champ3.getText().equals(""))
 				 			number2=champ3.getText();
 				 		
 				 		Modele m = getModele();
