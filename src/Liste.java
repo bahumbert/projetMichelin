@@ -277,7 +277,7 @@ public class Liste
 	{
 		Ligne ligne;
 		Set<String> lines = new LinkedHashSet<String>();
-		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.LOAD);
+		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
 		fd.setDirectory(".");
 		fd.setVisible(true);
 		
