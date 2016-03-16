@@ -151,8 +151,13 @@ public class Liste
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
-		    if (auteur!="" && (!(ligne.getIdUtilisateur().contains(auteur))))
-		        it.remove();
+			if (!auteur.equals(""))
+			{
+		    	if(!(ligne.getIdUtilisateur().contains(auteur) || ligne.getCommentaire().contains(auteur)))
+		    	{
+		    			it.remove();
+		    	}
+			}
 		    
 		    else if (!revision1.equals("") && parseTicket(ligne.getNumeroVersion())< r1)
 		    	it.remove();
