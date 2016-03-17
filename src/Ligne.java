@@ -27,7 +27,7 @@ public class Ligne {
 			this.commentaire = split[3];
 			this.tickets = "";
 		}
-		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorï¿½e");
+		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
 	}
 	
 	public String detectionTickets(String tickets){

@@ -65,7 +65,7 @@ public class Liste
 						this.liste.add(new Ligne(ligne));
 					}
 					catch (Exception e){
-						System.out.println("Ligne non valide et ignorï¿½e");
+						System.out.println("Ligne non valide et ignorée");
 					}
 				}
 				br.close(); 
@@ -117,13 +117,13 @@ public class Liste
 			tmp = t.detectionTickets(tickets);
 			
 			if (tmp != "" && !tmp.contains(",")){
-				affichage += "Trouvï¿½ " + tmp + "\n";
+				affichage += "Trouvé " + tmp + "\n";
 			}
 			else if (tmp != "" && tmp.contains(",")){
 				affichage += "!! Conflit !! => " + tmp + "\n";
 			}
 			else if (tmp == ""){
-				affichage += "Aucun ticket repï¿½rï¿½ dans cette ligne\n";
+				affichage += "Aucun ticket repéré dans cette ligne\n";
 			}
 		}
 		return affichage;
@@ -323,7 +323,7 @@ public class Liste
 			
 			output.flush();
 			output.close();
-			JOptionPane.showConfirmDialog(null, "Les tickets ont bien ï¿½tï¿½ sauvegardï¿½s", "Export", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(null, "Les tickets ont bien été sauvegardés", "Export", JOptionPane.DEFAULT_OPTION);
 
 		}
 	}
@@ -367,7 +367,7 @@ public class Liste
 			StreamResult result = new StreamResult(new File(path));
 
 			transformer.transform(source, result);
-			JOptionPane.showConfirmDialog(null, "L'environnement a bien ï¿½tï¿½ sauvegardï¿½", "Export", JOptionPane.DEFAULT_OPTION);
+			JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 		  } 
 		catch (ParserConfigurationException pce) {pce.printStackTrace();} 
 		catch (TransformerException tfe) {tfe.printStackTrace();}
@@ -388,7 +388,7 @@ public class Liste
 		output.flush();
 		output.close();
 		
-		JOptionPane.showConfirmDialog(null, "L'environnement a bien ï¿½tï¿½ sauvegardï¿½", "Export", JOptionPane.DEFAULT_OPTION);
+		JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 	}
 	
 	public void sauver() throws IOException
