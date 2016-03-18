@@ -2,11 +2,11 @@ import javax.swing.table.AbstractTableModel;
 
 import java.lang.Object;
 
-public class Modele extends AbstractTableModel
+public class Modele extends AbstractTableModel																		// Gère les données
 {
 	private static final long serialVersionUID = 1L;
 	
-	private final String[] entetes = {"Numero","Auteur","Date","Commmentaire", "Ticket(s) repéré(s)"};
+	private final String[] entetes = {"Numero","Auteur","Date","Commmentaire", "Ticket(s) repéré(s)"};				// Colonnes
 	private Liste liste;
 	private Liste originale;
 	
@@ -57,7 +57,7 @@ public class Modele extends AbstractTableModel
 	}
 
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	public Object getValueAt(int rowIndex, int columnIndex) {															// Retourne la valeur d'une cellule
 		switch (columnIndex) {
 		case 0:
 			return liste.getListe().get(rowIndex).getNumeroVersion();
@@ -85,7 +85,7 @@ public class Modele extends AbstractTableModel
 	}
 	
 	@Override
-	public void setValueAt(Object value, int row, int col) {
+	public void setValueAt(Object value, int row, int col) {															// Modifie la valeur d'une cellule
 	    
 	    switch (col) {
 		case 0:
@@ -106,7 +106,6 @@ public class Modele extends AbstractTableModel
 			
 		case 4:
 			liste.getListe().get(row).setTickets((String)value);
-			//gestionTicketsAvancee(row, (String)value);
 			break;
 			
 		default:

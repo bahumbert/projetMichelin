@@ -9,16 +9,16 @@ public class CustomTableCellRenderer extends DefaultTableCellRenderer
 	@Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
     {
-		
+		/* Gère les couleurs des lignes en fonction de la détection des tickets */
         Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         
         if (table.getValueAt(row, 4).toString().equals(" ")){
         	cell.setBackground( Color.white );
         }
-        else if(table.getValueAt(row, 4)!=null && table.getValueAt(row, 4).toString().contains("(") || table.getValueAt(row, 4).toString().contains(" ")) {
+        else if(table.getValueAt(row, 4)!=null && table.getValueAt(row, 4).toString().contains("(") || table.getValueAt(row, 4).toString().contains(" ")) {		// Conflit
         	cell.setBackground( Color.orange );
         }
-        else if(table.getValueAt(row, 4)==null || table.getValueAt(row, 4).equals("")) {
+        else if(table.getValueAt(row, 4)==null || table.getValueAt(row, 4).equals("")) {																		// Aucun ticket
         	cell.setBackground( Color.yellow );
         }
         else {

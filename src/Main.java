@@ -3,6 +3,6 @@ import java.text.ParseException;
 public class Main
 {
 	public static void main(String[] args) throws ParseException {
-		Fenetre f = new Fenetre("isiCommit");
+		/*Fenetre f =*/ new Fenetre("isiCommit");
 	}
 }

@@ -8,6 +8,7 @@ import java.awt.event.*;
  * Code copié collé de :
  * https://docs.oracle.com/javase/tutorial/uiswing/examples/components/
  * TabComponentsDemo
+ * Gère les onglets
  */ 
 public class Barre extends JPanel {
     /**

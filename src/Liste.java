@@ -45,12 +45,12 @@ public class Liste
 		return this.liste;
 	}
 	
-	public Liste(String fichier){
+	public Liste(String fichier){										// Constructeur depuis un fichier
 		this.liste = new ArrayList<Ligne>();
 		
 		String extension = getExtension(fichier);
 		
-		if(extension.equals("csv")){
+		if(extension.equals("csv")){									// csv
 			
 			try{
 				InputStream ips=new FileInputStream(fichier); 
@@ -62,7 +62,7 @@ public class Liste
 				
 				while ((ligne=br.readLine())!=null){
 					try {
-						this.liste.add(new Ligne(ligne));
+						this.liste.add(new Ligne(ligne));				// Ajout des lignes
 					}
 					catch (Exception e){
 						System.out.println("Ligne non valide et ignorée");
@@ -75,14 +75,12 @@ public class Liste
 			}
 			
 		}
-		else if (extension.equals("xml")){
+		else if (extension.equals("xml")){								// xml
 			try {
 				new ParseXML(fichier, this.liste);
 			} catch (DOMException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -106,7 +104,7 @@ public class Liste
 		return "Il y a " + this.liste.size() + " lignes dans cette liste.";
 	}
 	
-	public String detectionTickets(String tickets){
+	public String detectionTickets(String tickets){								// Détection de tickets (String en return pour débuggage)
 		
 		String affichage = "";
 		String tmp;
@@ -114,7 +112,7 @@ public class Liste
 			
 			//System.out.println("Appel liste " + t.commentaire);
 			
-			tmp = t.detectionTickets(tickets);
+			tmp = t.detectionTickets(tickets);									// Détection de tickets par ligne
 			
 			if (tmp != "" && !tmp.contains(",")){
 				affichage += "Trouvé " + tmp + "\n";
@@ -129,7 +127,7 @@ public class Liste
 		return affichage;
 	}
 		
-	public Liste filtres (String auteur, String date1, String date2,String revision1,String revision2) throws ParseException
+	public Liste filtres (String auteur, String date1, String date2,String revision1,String revision2) throws ParseException		// Filtres sur la liste
 	{
 		Liste filtre = new Liste(this);
 		Date d1 = new Date();
@@ -147,7 +145,7 @@ public class Liste
 		if(!revision2.equals(""))
 			r2=parseTicket(revision2);
 		
-		System.out.println(r1);
+		//System.out.println(r1);
 
 		for (Iterator<Ligne> it=filtre.liste.iterator(); it.hasNext();) {
 			ligne=it.next();
@@ -177,7 +175,7 @@ public class Liste
 		return filtre;
 	}
 	
-	private String getExtension(String filename) {
+	private String getExtension(String filename) {									// Vérifie l'extension d'un fichier
         if (filename == null) {
             return null;
         }
@@ -194,7 +192,7 @@ public class Liste
         }
     }
 	
-	public static int parseTicket(String s)
+	public static int parseTicket(String s)											// Enlève d'éventuelles lettres devant le numéro de révision
 	{
 		int res;
 		
@@ -204,7 +202,7 @@ public class Liste
 		return res;
 	}
 	
-	public Liste comparerIdentique(Liste liste2)
+	public Liste comparerIdentique(Liste liste2)									// Comparaison identique
 	{
 		Liste l = new Liste();
 		int i=0, j=0;
@@ -238,12 +236,12 @@ public class Liste
 		return l;
 	}
 	
-	public Liste comparerDifferent(Liste liste2)
+	public Liste comparerDifferent(Liste liste2)									// Comparaison différents
 	{
 		Liste l = new Liste(liste2);
 		int i=0, j=0;
 		int length1=this.liste.size();
-		int length2=l.liste.size();
+		int length2=liste2.liste.size();
 		int version1, version2;
 		Boolean trouve;
 		
@@ -281,7 +279,7 @@ public class Liste
 		return l;
 	}
 	
-	public void export() throws IOException
+	public void export() throws IOException														// Export des tickets
 	{
 		Ligne ligne;
 		Set<String> lines = new LinkedHashSet<String>();
@@ -313,7 +311,7 @@ public class Liste
 					split=ligne.getTickets().split("\\(");
 					split=split[0].split(" ");
 					for(String ticket:split)
-						//La redondance est supprimÃ©e
+						//La redondance est supprimée
 						lines.add(ticket+"\r\n");
 				}
 	    	}
@@ -328,7 +326,7 @@ public class Liste
 		}
 	}
 	
-	public void exportXml(String path)
+	public void exportXml(String path)																					// Export des données sous format xml
 	{
 		Ligne ligne;
 		try {
@@ -373,7 +371,7 @@ public class Liste
 		catch (TransformerException tfe) {tfe.printStackTrace();}
 	}
 	
-	public void exportCsv(String path) throws IOException
+	public void exportCsv(String path) throws IOException																	// Export des données sous format csv
 	{
 		Ligne ligne;
 		FileWriter fw = new FileWriter(path,false);
@@ -391,7 +389,7 @@ public class Liste
 		JOptionPane.showConfirmDialog(null, "L'environnement a bien été sauvegardé", "Export", JOptionPane.DEFAULT_OPTION);
 	}
 	
-	public void sauver() throws IOException
+	public void sauver() throws IOException																					// Export des données (appelle l'une des deux fonctions ci-dessus)
 	{
 		FileDialog fd = new FileDialog(new JFrame(), "Choose a file", FileDialog.SAVE);
 		fd.setDirectory(".");
@@ -412,7 +410,6 @@ public class Liste
 		    {
 		    	filename = filename.replaceFirst("[.][^.]+$", "");
 				filename+=".csv";
-				//System.out.println(filename);
 		    	exportCsv(path+filename);
 			}
 		}

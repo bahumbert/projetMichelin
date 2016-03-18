@@ -15,11 +15,10 @@ public class Ligne {
 	String tickets;
 	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 	
-	public Ligne(String ligne) throws Exception{
+	public Ligne(String ligne) throws Exception{											// Constructeur de ligne
 		String[] split = ligne.split(";");
-		//System.out.println(split[0]+ " " + split[1] + " " + split[2] +" "+ split[3]);
+		
 		if (split.length >= 4 && split[3] != null){
-		//System.out.println(split[4]);
 			this.numeroVersion = split[0];
 			this.idUtilisateur = split[1];
 			this.date = split[2];
@@ -30,71 +29,50 @@ public class Ligne {
 		else throw new ArrayIndexOutOfBoundsException("Ligne non valide et ignorée");
 	}
 	
-	public String detectionTickets(String tickets){
+	public String detectionTickets(String tickets){											// Détection des tickets par ligne
 		
 		String listTickets = "";
 		String[] split = tickets.split(",");
 		String commentaire = "";
-		//System.out.println("COUCOU");
-		for (String ticketCour : split){
+		for (String ticketCour : split){													// Pour chaque ticket en paramètre
 			
 			ticketCour = ticketCour.trim();
-			//System.out.println("FOR");
 			
 			int indexCour = 0;
 			int index2 = 0;
 			
-			while(indexCour-ticketCour.length() != -1 && index2 != -1 && index2 < this.commentaire.length()-1){						// && ticket == ""
+			while(indexCour-ticketCour.length() != -1 && index2 != -1 && index2 < this.commentaire.length()-1){			// On cherche ce ticket dans le commentaire			
 			
-				//System.out.println(this.commentaire.length());
-				commentaire = this.commentaire.substring(index2);
-				//System.out.println(commentaire);
+				commentaire = this.commentaire.substring(index2);							
 				indexCour = commentaire.indexOf(ticketCour) + ticketCour.length();
 				
 				if(indexCour-ticketCour.length() != -1){
-										
-					//System.out.println("indexCour !=-1 ="+indexCour);
-					//System.out.println("index2 ="+index2);
-					
-					Pattern p = Pattern.compile("^[-]{1}[0-9]{1,}");
+															
+					Pattern p = Pattern.compile("^[-]{1}[0-9]{1,}");						// Si on a trouvé une chaîne de caractère qui correspond au ticket, on cherche maintenant s'il est suivi d'un tiret et de chiffres
 					Matcher m = p.matcher(commentaire.substring(indexCour));
-					//System.out.println(commentaire.substring(indexCour));
-					//System.out.println(m.toString());
-					
 					if (m.find()){
 						
-						//System.out.println("TROUVE ind=" + indexCour + " end=" + m.end());
-						//System.out.println(commentaire.substring(indexCour,indexCour+m.end()));
-						
-						String ticket = ticketCour + commentaire.substring(indexCour,indexCour+m.end());
-						
-						//if (!listTickets.contains(ticket)){
-							listTickets += ticket + ", ";
-						//}
-					    
+						String ticket = ticketCour + commentaire.substring(indexCour,indexCour+m.end());	// Si oui alors on l'ajoute aux tickets détectés pour cette ligne suivi d'une virgule (pour le cas où il y en a un autre ensuite)
+						listTickets += ticket + ", ";
 					    index2+= indexCour + m.end();
-					    //System.out.println("FIN indexCour="+indexCour);
-					    //System.out.println("FIN index2="+index2);
 					}
 					else {
 						index2+= indexCour+1;
-						/*System.out.println("FIN indexCour="+indexCour);
-					    System.out.println("FIN index2="+index2);*/
 					}
 				}
 			}
 		}
 		
-		if (listTickets.length() != 0){
+		if (listTickets.length() != 0){										
 			
 			int count = 0;
 			int max = 0;
 			String ticketRepete = "";
 			
-			this.tickets = listTickets.substring(0,listTickets.length()-2); // Suppression de la derniï¿½re virgule
+			this.tickets = listTickets.substring(0,listTickets.length()-2); 				// Suppression de la dernière virgule
 			
-			String[] listeTickets = this.tickets.split(",");
-			for(String t : listeTickets){
+			String[] listeTickets = this.tickets.split(",");								// Détection avancée
+			for(String t : listeTickets){													// On regarde combien de fois le même ticket est repété
 				t = t.trim();
 			
 				count = org.apache.commons.lang3.StringUtils.countMatches((CharSequence)this.tickets, (CharSequence)t);
@@ -110,7 +88,7 @@ public class Ligne {
 				String ticketReplace = "";
 				
 				ticketReplace = this.tickets.replace(", "+ticketRepete, "");
-				ticketReplace = ticketReplace.replace(ticketRepete+ ",", "");
+				ticketReplace = ticketReplace.replace(ticketRepete+ ",", "");				// Si un ticket y est plus d'une fois, on efface les occurences (sauf une) et on le positione en principal
 				ticketReplace = ticketReplace.replace(ticketRepete, "");
 				
 				if (!ticketReplace.equals("")){
@@ -121,12 +99,11 @@ public class Ligne {
 				}
 			}
 			else if (this.tickets.contains(",")) {
-				this.tickets = this.tickets.substring(0, this.tickets.indexOf(","))+" ("+this.tickets.substring(this.tickets.indexOf(",")+2)+")";
+				this.tickets = this.tickets.substring(0, this.tickets.indexOf(","))+" ("+this.tickets.substring(this.tickets.indexOf(",")+2)+")";	// Formatage des données "ticket-principal (tickets-secondaires)"
 			}
 			else{}
 					
 		}
-		//System.out.println(this.tickets);
 		return this.tickets;
 	}
 

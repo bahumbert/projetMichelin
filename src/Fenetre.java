@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -33,12 +32,12 @@ public class Fenetre extends JFrame
 	private static final long serialVersionUID = 1L;
 	JTabbedPane onglets;
 	 
-	 private void ajoutOnglet(File f)
+	 private void ajoutOnglet(File f)										// Ajoute un nouvel onglet
 	 {
 		 int index;
 		 try{
 			 String nom=f.getName();
-			 onglets.addTab(nom, table(new Liste(f.getAbsolutePath())));
+			 onglets.addTab(nom, table(new Liste(f.getAbsolutePath())));	// Création de la liste correspondante à l'onglet
 			 index=(onglets.getTabCount())-1;
 			 onglets.setTabComponentAt(index,new Barre(onglets));
 			 onglets.setSelectedIndex(index);
@@ -62,7 +61,7 @@ public class Fenetre extends JFrame
 		 }
 	 }
 	 
-	 public Modele getModele()
+	 public Modele getModele()												// Récupère le Modèle (les données)
 	 {
 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
 	 	JTable t = (JTable) s.getViewport().getView();
@@ -71,11 +70,11 @@ public class Fenetre extends JFrame
 	 	return m;
 	 }
 	 
-	 ActionListener MenuListener = new ActionListener() {
+	 ActionListener MenuListener = new ActionListener() {					// Actions du menu
 		 public void actionPerformed(ActionEvent event) {
 			 switch(event.getActionCommand())
 			 {
-				case "Importer un fichier...":
+				case "Importer un fichier...":								// Importation fichier
 					FileDialog fd = new FileDialog(new JFrame(), "Choisissez un fichier", FileDialog.LOAD);
 					fd.setDirectory(".");
 					fd.setVisible(true);
@@ -93,7 +92,7 @@ public class Fenetre extends JFrame
 					}
 				break;
 				
-			 	case "Importer depuis le serveur...":
+			 	case "Importer depuis le serveur...":						// Importation svn log depuis serveur
 			 					 		
 			 		JFileChooser fac = new JFileChooser(".");
 			 		fac.setCurrentDirectory(new java.io.File("."));
@@ -111,16 +110,16 @@ public class Fenetre extends JFrame
 			 	    if (emplacement != ""){
 			 	    	
 			 	    	
-						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+						SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");		// Fenêtre des filtres sur svn log
 			 			
-			 			String message = "Sï¿½lectionnez les filtres souhaitï¿½s";
+			 			String message = "Sï¿½lectionnez les filtres souhaités";
 
 				 		JLabel max = new JLabel("Nombre maximum");
 				 		JTextField champMax= new JTextField("500");
-				 		JLabel revision = new JLabel("Numï¿½ro de rï¿½vision");
-				 		JLabel borneInf = new JLabel("Borne infï¿½rieure :");
+				 		JLabel revision = new JLabel("Numéro de révision");
+				 		JLabel borneInf = new JLabel("Borne inférieure :");
 				 		JTextField champRevision1= new JTextField();
-				 		JLabel borneSup = new JLabel("Borne Supï¿½rieure :");
+				 		JLabel borneSup = new JLabel("Borne Supérieure :");
 				 		JTextField champRevision2= new JTextField("HEAD");
 				 		JLabel dates = new JLabel("Dates");
 				 		JXDatePicker date1 = new JXDatePicker();
@@ -137,7 +136,7 @@ public class Fenetre extends JFrame
 				 			String valMax="", valDay1="",valDay2="", valRevision1="", valRevision2="", parametres = "";
 				 			
 				 			
-					 		if(champMax.getText()!=null){
+					 		if(champMax.getText()!=null){									// "Encodage" des filtres en flags svn log
 					 			valMax=champMax.getText();
 					 			parametres += " -l " + valMax;
 					 		}
@@ -170,22 +169,16 @@ public class Fenetre extends JFrame
 						 		}
 					 		}
 
-				 			String cmd[] = {"cmd.exe", "/C", "svn log " + parametres + " --xml > svnlog.xml"};
-				 			System.out.println(parametres);
+				 			String cmd[] = {"cmd.exe", "/C", "svn log " + parametres + " --xml > svnlog.xml"};		// Commande à exécuter
 					 		String path = "";
 					 		try {
 								Runtime r = Runtime.getRuntime();
 								
-								/*String test = System.getenv("Path");
-								System.out.println(test);
-								System.out.println(test.length());*/
-								
 								InputStream ips;
 								try {
 									ips = new FileInputStream("./pathTortoise.txt");
-									InputStreamReader ipsr=new InputStreamReader(ips);
+									InputStreamReader ipsr=new InputStreamReader(ips);								// Récupération du Path pour svn log
 									BufferedReader br=new BufferedReader(ipsr);
-									//System.out.println("Fichier ouvert");
 									
 						 			String ligne = "";
 						 			
@@ -196,7 +189,7 @@ public class Fenetre extends JFrame
 									br.close(); 
 								} 
 								catch (FileNotFoundException e) {
-									System.out.println("Le fichier de configuration n'a pas ï¿½tï¿½ trouvï¿½");
+									System.out.println("Le fichier de configuration n'a pas été trouvé");
 									path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin";
 									File fichier = new File("./pathTortoise.txt");
 							 		try {
@@ -204,7 +197,6 @@ public class Fenetre extends JFrame
 										fw.write(path);
 										fw.close();
 									} catch (IOException e2) {
-										// TODO Auto-generated catch block
 										e2.printStackTrace();
 									}
 								} 
@@ -213,42 +205,28 @@ public class Fenetre extends JFrame
 									path = "C:\\Program Files (x86)\\TortoiseSVN\\bin;C:\\Program Files\\TortoiseSVN\\bin";
 								} 
 								
-								
-								//System.out.println(path);
-								
-								final Process p = r.exec(cmd, new String[]{"Path="+path},  new File(emplacement));
+								final Process p = r.exec(cmd, new String[]{"Path="+path},  new File(emplacement));				// Exécution de la commande
 								
 								BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
 								BufferedReader stdErr = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-								
-		
-								//System.out.println("Commande :\n");
-		
-								//int count = 0;
+
 								String s;
 								String result = "";
 								while ((s = stdInput.readLine()) != null) {
-									//count++;
 									result = result + s + "\n";
 								}
-								
 								stdInput.close();
-								
-								//count = 0;
 								String err = "";
-								while ((s = stdErr.readLine()) != null) {
-									//count++;
+								while ((s = stdErr.readLine()) != null) {														// Récupération de l'output de la commande
 									err = err + s + "\n";
 								}
 								
 								stdErr.close();
 								
-								//System.out.println("commande =" + cmd.toString() + "\nresult : " + count + " : " + result + " err="+err);
-								
 								if (err.equals("")){
-									File fichier = new File(emplacement+"\\svnlog.xml");
+									File fichier = new File(emplacement+"\\svnlog.xml");										// Création d'un fichier xml avec le résultat de la commande
 									try{
-										ajoutOnglet(fichier);
+										ajoutOnglet(fichier);																	// Et ouverture de ce fichier
 									}
 									catch(Exception e){
 										System.out.println("Erreur "+e.toString());
@@ -259,7 +237,7 @@ public class Fenetre extends JFrame
 								}
 					 		}
 					 		catch(Exception e) {
-								System.out.println("Erreur d'exï¿½cution " + cmd + e.toString());
+								System.out.println("Erreur d'exécution " + cmd + e.toString());
 					        }
 						}
 			 	    }
@@ -268,9 +246,9 @@ public class Fenetre extends JFrame
 
 
 
-			 	case "Sauvegarder...":
+			 	case "Sauvegarder...":																							// Export des données
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour sauvegarder", "Sauvegarder", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 						try {
@@ -282,9 +260,9 @@ public class Fenetre extends JFrame
 			 		}
 			 	break;
 			 	
-			 	case "Exporter les tickets...":
+			 	case "Exporter les tickets...":																					// Export des tickets
 			 		if(onglets.getTabCount()==0){
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour effectuer l'export", "Export des tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 						try {
@@ -303,17 +281,17 @@ public class Fenetre extends JFrame
 
 			 /************ Menu Outils **************/
 			 		
-			 	case "Appliquer des filtres":
+			 	case "Appliquer des filtres":																					// Filtres
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour appliquer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
 			 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			 			
 			 			String author="", day1="",day2="",number1="",number2="";
-			 			String message = "Sï¿½lectionnez les filtres souhaitï¿½s";
+			 			String message = "Sélectionnez les filtres souhaités";
 
 				 		JLabel auteur = new JLabel("Auteur");
 				 		JTextField champ1= new JTextField();
@@ -323,10 +301,10 @@ public class Fenetre extends JFrame
 				 			date1.setFormats(format);
 				 			date2.setDate(Calendar.getInstance().getTime());
 				 			date2.setFormats(format);
-				 		JLabel ticket = new JLabel("Numï¿½ro de rï¿½vision");
-				 		JLabel borneInf = new JLabel("Borne infï¿½rieure :");
+				 		JLabel ticket = new JLabel("Numéro de révision");
+				 		JLabel borneInf = new JLabel("Borne inférieure :");
 				 		JTextField champ2 = new JTextField();
-				 		JLabel borneSup = new JLabel("Borne Supï¿½rieure :");
+				 		JLabel borneSup = new JLabel("Borne Supérieure :");
 				 		JTextField champ3= new JTextField();
 				 		
 				 		Object [] params ={message,auteur,champ1,dates,date1,date2,ticket,borneInf,champ2,borneSup,champ3};
@@ -348,7 +326,7 @@ public class Fenetre extends JFrame
 				 		
 				 		Modele m = getModele();
 				 		try {
-							Liste l=m.getListe().filtres(author, day1, day2, number1,number2);
+							Liste l=m.getListe().filtres(author, day1, day2, number1,number2);				// Appel de la fonction des filtres
 							m.setListe(l);
 							m.fireTableDataChanged();
 						} 
@@ -359,27 +337,27 @@ public class Fenetre extends JFrame
 			 		}
 			 	break;
 			 	
-			 	case "Enlever tous les filtres":
+			 	case "Enlever tous les filtres":															// Suppression des filtres
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour supprimer des filtres", "Filtres", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else
 			 		{
 						Modele model = getModele();
 			 			model.retour();
 			 			model.fireTableDataChanged();
-			 			for (int row = 0; row < model.getRowCount(); row++){
+			 			for (int row = 0; row < model.getRowCount(); row++){								// Suppression d'une éventuelle détection de tickets
 				 			model.setValueAt(" ", row, 4);
 				 		}
 			 			model.fireTableDataChanged();
 			 		}
 			 	break;
 			 	
-				case "Detecter des tickets":
+				case "Detecter des tickets":																	// Détection tickets
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour rechercher des tickets", "Tickets", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour rechercher des tickets", "Tickets", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 			 			Modele model = getModele();
@@ -389,7 +367,6 @@ public class Fenetre extends JFrame
 							ips = new FileInputStream("./tickets.txt");
 							InputStreamReader ipsr=new InputStreamReader(ips);
 							BufferedReader br=new BufferedReader(ipsr);
-							//System.out.println("Fichier ouvert");
 							
 				 			String ligne = "";
 				 			
@@ -400,13 +377,13 @@ public class Fenetre extends JFrame
 							br.close(); 
 						} 
 						catch (FileNotFoundException e) {
-							System.out.println("Le fichier des tickets n'a pas ï¿½tï¿½ trouvï¿½");
+							System.out.println("Le fichier des tickets n'a pas été trouvé");
 						} 
 						catch (IOException e) {
 							e.printStackTrace();
 						} 
 
-			 			String msg = "Entrer le(s) ticket(s) souhaitï¿½(s)";
+			 			String msg = "Entrer le(s) ticket(s) souhaité(s)";
 				 		JTextField pattern= new JTextField(tickets);
 				 				 		
 				 		Object [] parameters ={msg,pattern};
@@ -414,7 +391,7 @@ public class Fenetre extends JFrame
 			 			
 				 		if (res == 0 && !pattern.getText().equals("")){
 												 		
-					 		for (int row = 0; row < model.getRowCount(); row++){
+					 		for (int row = 0; row < model.getRowCount(); row++){					// Reset des données de la colonne des tickets
 					 			model.setValueAt("", row, 4);
 					 		}
 					 		
@@ -424,20 +401,16 @@ public class Fenetre extends JFrame
 								fw.write(pattern.getText());
 								fw.close();
 							} catch (IOException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 					 		
 					 		
-					 		/*String affichage =*/ model.getListe().detectionTickets(pattern.getText());
+					 		/*String affichage =*/ model.getListe().detectionTickets(pattern.getText());					// Appel fonction de détection tickets
 							
 					 		JScrollPane s = (JScrollPane) onglets.getSelectedComponent();
-					 		JTable t = (JTable) s.getViewport().getView();
-					 		
+					 		JTable t = (JTable) s.getViewport().getView();													// Appel de la coloration des lignes
 						    TableCellRenderer renderer2 = new CustomTableCellRenderer();
-
-						
-						    t.setDefaultRenderer(Object.class, renderer2);
+						    t.setDefaultRenderer(Object.class, renderer2);													
 
 
 				 		}
@@ -463,7 +436,7 @@ public class Fenetre extends JFrame
 				case("Annuler la detection"):
 			 		if(onglets.getTabCount()==0)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit ï¿½tre ouvert pour annuler la dï¿½tection", "Dï¿½tection", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins un fichier doit être ouvert pour annuler la détection", "Détection", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else {
 						Modele model = getModele();
@@ -475,11 +448,11 @@ public class Fenetre extends JFrame
 				
 			 	break;
 
-			 	case("Trouver les similitudes"):
+			 	case("Trouver les similitudes"):											// Comparaisons d'onglets
 				case("Trouver les differences"):
 			 		if(onglets.getTabCount()<2)
 			 		{
-			 			JOptionPane.showConfirmDialog(null, "Au moins deux fichiers doivent ï¿½tre ouverts pour la comparaison", "Comparaison", JOptionPane.DEFAULT_OPTION);
+			 			JOptionPane.showConfirmDialog(null, "Au moins deux fichiers doivent être ouverts pour la comparaison", "Comparaison", JOptionPane.DEFAULT_OPTION);
 			 		}
 			 		else{
 			 			Modele mo = getModele();
@@ -524,11 +497,11 @@ public class Fenetre extends JFrame
 							}
 							else{
 								compare=mo.getListe().comparerDifferent(m2.getListe());
-								s="diffï¿½rence";
+								s="différence";
 							}
 							
 							if(compare.liste.size()==0)
-								JOptionPane.showConfirmDialog(null, "Aucune "+s+" n'a ï¿½tï¿½ trouvï¿½e", "Comparaison", JOptionPane.DEFAULT_OPTION);
+								JOptionPane.showConfirmDialog(null, "Aucune "+s+" n'a été trouvée", "Comparaison", JOptionPane.DEFAULT_OPTION);
 
 							else
 								ajoutOnglet(compare);
@@ -601,7 +574,7 @@ public class Fenetre extends JFrame
 		setJMenuBar(menuBar);
 	}
 	 
-	 public static void resizeColumnWidth(JTable table) {
+	 public static void resizeColumnWidth(JTable table) {										// Resize des colonnes
 		    int cumulativeActual = 0;
 		    int padding = 15;
 		    int max =700;
@@ -623,13 +596,13 @@ public class Fenetre extends JFrame
 		            column.setMaxWidth(width);
 		            cumulativeActual += column.getWidth();
 		        } else {
-		        	//DerniÃ¨re colonne 
+		        	//Dernière colonne 
 		            column.setPreferredWidth((int) table.getSize().getWidth() - cumulativeActual);
 		        }
 		    }
 		}
 	 
-	 private void updateRowHeights(JTable table)
+	 private void updateRowHeights(JTable table)															// Resize des lignes
 	 {
 	     for (int row = 0; row < table.getRowCount(); row++)
 	     {
@@ -643,7 +616,7 @@ public class Fenetre extends JFrame
 	     }
 	 }
 	 
-	private JScrollPane table(Liste liste)
+	private JScrollPane table(Liste liste)																// Instanciation de la JTable
 	{
 		JTable table;
 		DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
@@ -667,7 +640,7 @@ public class Fenetre extends JFrame
 		return pane;
 	}
 	
-	public Fenetre(String name)
+	public Fenetre(String name)																// Constructeur
 	{
 		 this.setTitle(name);
 		 this.setLocationRelativeTo(null); 
@@ -687,9 +660,6 @@ public class Fenetre extends JFrame
 		 this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		 this.setVisible(true);
 		 
-
-		/*Component test = onglets.getTabComponentAt(0);
-		test.setBackground(Color.blue);*/
 	}
 	
 }
