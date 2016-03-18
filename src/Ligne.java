@@ -212,7 +212,7 @@ public class Ligne {
 				this.idUtilisateur.equals(l.idUtilisateur)&&
 				this.date.equals(l.date)&&
 				//this.lignes.equals(l.lignes)&&
-				this.commentaire.equals(l.commentaire))
+				this.commentaire.trim().equals(l.commentaire.trim()))
 			res=true;
 			
 		return res;
